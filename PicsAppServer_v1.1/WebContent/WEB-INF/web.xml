@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<display-name>PicsAppServer_v1.1</display-name>
+	<servlet>
+		<description>
+		Servlet qui enregistre les identifiants des utilisateurs </description>
+		<display-name>RegisterUser</display-name>
+		<servlet-name>RegisterUser</servlet-name>
+		<servlet-class>org.tomcat.servlet.RegisterUser</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		Servlet qui retourne aux clients tous les utilisateurs de la base de données à l'exception de l'émetteur de la requête</description>
+		<display-name>GetUsers</display-name>
+		<servlet-name>GetUsers</servlet-name>
+		<servlet-class>org.tomcat.servlet.GetUsers</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		Servlet qui permet de recevoir l'image</description>
+		<display-name>ReceiveImage</display-name>
+		<servlet-name>ReceiveImage</servlet-name>
+		<servlet-class>org.tomcat.servlet.ReceiveImage</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RegisterUser</servlet-name>
+		<url-pattern>/RegisterUser</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>GetUsers</servlet-name>
+		<url-pattern>/GetUsers</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ReceiveImage</servlet-name>
+		<url-pattern>/ReceiveImage</url-pattern>
+	</servlet-mapping>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>
