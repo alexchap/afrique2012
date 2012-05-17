@@ -1,6 +1,7 @@
 package org.android.activities;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 
 import org.android.R;
@@ -14,12 +15,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 /**
@@ -42,6 +47,13 @@ public class PicsAppActivity extends Activity {
 
 	/** id du téléphone */
 	public static String mPhoneId;
+	
+	/** Exif tag pour le commentaire d'une image */
+	final String EXIF_TAG = "UserComment";
+	
+	/** Le chemin d'accès de l'image sélectionnée */
+	private String mSelectedImagePath;
+
 
 	/** Appelée à la création de l'activité. */
 	@Override
@@ -79,8 +91,6 @@ public class PicsAppActivity extends Activity {
 		}
 	}
 
-	/** Le chemin d'accès de l'image sélectionnée */
-	private String mSelectedImagePath;
 
 	/**
 	 * Méthode appelée lors d'un clic sur le bouton pour envoyer une nouvelle
@@ -88,7 +98,7 @@ public class PicsAppActivity extends Activity {
 	 * 
 	 * @param v
 	 */
-	public void addPicture() {
+	public void addPicture(View v) {
 		final Context mContext = PicsAppActivity.this;
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
@@ -170,9 +180,42 @@ public class PicsAppActivity extends Activity {
 						Toast.LENGTH_SHORT).show();
 				// addPicture(mSelectedImagePath);
 				// mSelectedImagePath = null;
+				editPictureBeforeSending();
+			} else {
+				Toast.makeText(getApplicationContext(),"No image found",
+						Toast.LENGTH_SHORT).show();
 			}
 			// }
 		}
+	}
+	
+	/**
+	 * Montre l'image avec son commentaires, edite le commentaire et liste déroulante pour
+	 * choisir l'utilisateur à qui envoyer l'image
+	 */
+	public void editPictureBeforeSending(){
+		setContentView(R.layout.edit_before_sending);
+		EditText edit_comment = (EditText) findViewById(R.id.edit_comment);
+		ImageView edit_image = (ImageView) findViewById(R.id.edit_imageview);
+		Bitmap bmImg = BitmapFactory.decodeFile(mSelectedImagePath);
+
+		edit_image.setImageBitmap(bmImg);
+		String comment = getComment(mSelectedImagePath);
+		if(comment != null){
+			edit_comment.setText(comment);
+		} else {
+			edit_comment.setText(R.string.new_comment);
+		}
+		
+		// TODO: add list of users
+	}
+	
+	/**
+	 * Envoie l'image au serveur...
+	 */
+	public void sendPicture(View v){
+		// TODO
+		// 1. save last comment entered by the user
 	}
 
 	/**
@@ -293,4 +336,37 @@ public class PicsAppActivity extends Activity {
 		// Affiche le dialogue
 		registrationDialog.show();
 	}
+	
+	  /** 
+     * Cette méthode écrit un commentaire dans une image en ajoutant
+     * un tag EXIF.
+     */
+    public boolean setComment(String imageName, String comment){
+    	
+		try {
+			ExifInterface exif = new ExifInterface(imageName);
+			exif.setAttribute(EXIF_TAG, comment);
+	    	exif.saveAttributes();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+    	
+    }
+    /**
+     * Cette méthode lit le tag EXIF représentant le commentaire inclu
+     * dans l'image
+     */
+    public String getComment(String imageName){
+    	String comment = null;
+    	try {
+			ExifInterface exif = new ExifInterface(imageName);
+			comment = exif.getAttribute(EXIF_TAG);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return comment;
+    }
 }

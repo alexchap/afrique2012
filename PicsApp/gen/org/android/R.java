@@ -16,12 +16,19 @@ public final class R {
         public static final int ic_launcher=0x7f020002;
     }
     public static final class id {
-        public static final int input_dialog_edittext=0x7f050001;
-        public static final int input_dialog_root=0x7f050000;
+        public static final int edit_comment=0x7f050003;
+        public static final int edit_imageview=0x7f050002;
+        public static final int edit_send_button=0x7f050004;
+        public static final int input_dialog_edittext=0x7f050006;
+        public static final int input_dialog_root=0x7f050005;
+        public static final int linear_game_layout=0x7f050001;
+        public static final int main_send_picture=0x7f050007;
+        public static final int scroll=0x7f050000;
     }
     public static final class layout {
-        public static final int input_dialog=0x7f030000;
-        public static final int main=0x7f030001;
+        public static final int edit_before_sending=0x7f030000;
+        public static final int input_dialog=0x7f030001;
+        public static final int main=0x7f030002;
     }
     public static final class string {
         public static final int accountcreate_buttonlabel=0x7f04000c;
@@ -39,9 +46,9 @@ public final class R {
         public static final int app_name=0x7f040000;
         public static final int choisir_util=0x7f04000e;
         public static final int confirmer=0x7f040019;
-        public static final int creer_album=0x7f040002;
         public static final int email_hint=0x7f040008;
         public static final int envoyer_album=0x7f040012;
+        public static final int envoyer_photo=0x7f040002;
         public static final int galerie=0x7f040010;
         public static final int new_album_activity_delete=0x7f040024;
         public static final int new_album_activity_empty=0x7f04002a;
@@ -61,6 +68,7 @@ public final class R {
         public static final int new_album_menu_edit=0x7f040029;
         public static final int new_album_menu_save=0x7f040027;
         public static final int new_album_menu_share=0x7f040026;
+        public static final int new_comment=0x7f04002b;
         public static final int password_hint=0x7f04000a;
         public static final int prendre_photo=0x7f040011;
         /**  Dialogue pour s'enregistrer 

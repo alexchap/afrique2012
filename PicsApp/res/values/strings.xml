@@ -40,7 +40,7 @@
     <!-- Dialogue pour s'enregistrer -->
     <string name="registration_dialog_title">Enregistrement</string>
     <string name="accountcreate_username_taken">Ce nom d\'utilisateur n\'est pas disponible</string>
-    
+
     <!-- Dialogue pour créer un nouvel album -->
     <string name="new_album_dialog_title">Créer un nouvel album</string>
     <string name="new_album_dialog_hint">Titre du nouvel album</string>
@@ -58,5 +58,6 @@
     <string name="new_album_menu_delete">Supprimer l\'album</string>
     <string name="new_album_menu_edit">Editer l\'album</string>
     <string name="new_album_activity_empty">L\'album est vide.</string>
+    <string name="new_comment">Commentaire</string>
 
 </resources>
