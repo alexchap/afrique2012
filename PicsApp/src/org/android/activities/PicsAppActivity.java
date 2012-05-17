@@ -234,21 +234,6 @@ public class PicsAppActivity extends Activity {
 		return inputDialog;
 	}
 
-	// /**
-	// * Vérifie si l'utilisateur existe déjà.
-	// */
-	// private void verifyUser() {
-	// if (!mCommHandler.isUser(mPhoneId)) {
-	// showRegistrationDialog();
-	//
-	// Toast.makeText(getApplicationContext(), "Is Not User",
-	// Toast.LENGTH_SHORT).show();
-	// } else {
-	// Toast.makeText(getApplicationContext(), "Is User",
-	// Toast.LENGTH_SHORT).show();
-	// }
-	// }
-
 	/**
 	 * Crée et affiche le dialogue d'enregistrement
 	 */
