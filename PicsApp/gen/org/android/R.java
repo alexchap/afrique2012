@@ -11,13 +11,73 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int background=0x7f020000;
+        public static final int ic_app=0x7f020001;
+        public static final int ic_launcher=0x7f020002;
+    }
+    public static final class id {
+        public static final int input_dialog_edittext=0x7f050001;
+        public static final int input_dialog_root=0x7f050000;
     }
     public static final class layout {
-        public static final int main=0x7f030000;
+        public static final int input_dialog=0x7f030000;
+        public static final int main=0x7f030001;
     }
     public static final class string {
-        public static final int app_name=0x7f040001;
-        public static final int hello=0x7f040000;
+        public static final int accountcreate_buttonlabel=0x7f04000c;
+        public static final int accountcreate_failure=0x7f04000d;
+        public static final int accountcreate_invalidemail=0x7f040009;
+        public static final int accountcreate_invalidpassword=0x7f04000b;
+        public static final int accountcreate_invalidusername=0x7f040007;
+        public static final int accountcreate_username_taken=0x7f04001c;
+        /**  Nouvel album 
+         */
+        public static final int ajouter_photo=0x7f04000f;
+        public static final int album_deja_existant=0x7f040017;
+        public static final int album_image_deja_existante=0x7f040018;
+        public static final int annuler=0x7f04001a;
+        public static final int app_name=0x7f040000;
+        public static final int choisir_util=0x7f04000e;
+        public static final int confirmer=0x7f040019;
+        public static final int creer_album=0x7f040002;
+        public static final int email_hint=0x7f040008;
+        public static final int envoyer_album=0x7f040012;
+        public static final int galerie=0x7f040010;
+        public static final int new_album_activity_delete=0x7f040024;
+        public static final int new_album_activity_empty=0x7f04002a;
+        public static final int new_album_activity_save=0x7f040020;
+        public static final int new_album_activity_save_album=0x7f040023;
+        public static final int new_album_activity_share=0x7f040021;
+        public static final int new_album_activity_share_failed=0x7f040022;
+        public static final int new_album_dialog_empty_title=0x7f04001f;
+        public static final int new_album_dialog_hint=0x7f04001e;
+        /**  Dialogue pour créer un nouvel album 
+         */
+        public static final int new_album_dialog_title=0x7f04001d;
+        /**  Options menu pour créer un nouvel album 
+         */
+        public static final int new_album_menu_add=0x7f040025;
+        public static final int new_album_menu_delete=0x7f040028;
+        public static final int new_album_menu_edit=0x7f040029;
+        public static final int new_album_menu_save=0x7f040027;
+        public static final int new_album_menu_share=0x7f040026;
+        public static final int password_hint=0x7f04000a;
+        public static final int prendre_photo=0x7f040011;
+        /**  Dialogue pour s'enregistrer 
+         */
+        public static final int registration_dialog_title=0x7f04001b;
+        public static final int supprimer_album=0x7f040013;
+        public static final int supprimer_album_confirmation=0x7f040014;
+        public static final int supprimer_album_erreur=0x7f040016;
+        public static final int supprimer_album_succes=0x7f040015;
+        /**  User 
+         */
+        public static final int username_hint=0x7f040006;
+        /**  Voir les albums 
+         */
+        public static final int view_albums_drafts=0x7f040003;
+        public static final int view_albums_received=0x7f040005;
+        public static final int view_albums_sent=0x7f040004;
+        public static final int voir_albums=0x7f040001;
     }
 }
