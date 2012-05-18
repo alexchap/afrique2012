@@ -124,7 +124,7 @@ public class CommunicationHandler {
 	 *            l'utilisateur courant de l'application
 	 * @return la liste des utilisateurs de l'application stockée sur le serveur
 	 */
-	public CharSequence[] getUsers(String phoneId) {
+	public ArrayList<String> getUsers(String phoneId) {
 		BufferedReader in = null;
 		ArrayList<String> users = null;
 
@@ -178,14 +178,14 @@ public class CommunicationHandler {
 
 		// Transforme la liste en CharSequence pour être représentée dans un
 		// dialogue
-		int length = users.size();
-		CharSequence[] userCharSequence = new CharSequence[length];
+//		int length = users.size();
+//		CharSequence[] userCharSequence = new CharSequence[length];
+//
+//		for (int i = 0; i < length; i++) {
+//			userCharSequence[i] = users.get(i);
+//		}
 
-		for (int i = 0; i < length; i++) {
-			userCharSequence[i] = users.get(i);
-		}
-
-		return userCharSequence;
+		return users;
 	}
 
 	// /**

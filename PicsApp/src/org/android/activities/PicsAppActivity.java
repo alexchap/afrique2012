@@ -1,7 +1,6 @@
 package org.android.activities;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Calendar;
 
 import org.android.R;
@@ -15,16 +14,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 /**
@@ -42,18 +37,14 @@ public class PicsAppActivity extends Activity {
 	/** Communication Handler */
 	private CommunicationHandler mCommHandler;
 
-	/** Tag pour l'album */
-	public static String ALBUM_EXTRA = "ALBUM_EXTRA";
-
 	/** id du téléphone */
 	public static String mPhoneId;
-	
+
 	/** Exif tag pour le commentaire d'une image */
 	final String EXIF_TAG = "UserComment";
-	
+
 	/** Le chemin d'accès de l'image sélectionnée */
 	private String mSelectedImagePath;
-
 
 	/** Appelée à la création de l'activité. */
 	@Override
@@ -74,11 +65,9 @@ public class PicsAppActivity extends Activity {
 		// Vérifie que l'utilisateur est enregistré
 		if (!mCommHandler.isUser(mPhoneId)) {
 			showRegistrationDialog();
-
-			Toast.makeText(getApplicationContext(), "Is Not User",
-					Toast.LENGTH_SHORT).show();
 		} else {
-			Toast.makeText(getApplicationContext(), "Is User",
+			Toast.makeText(getApplicationContext(),
+					getResources().getString(R.string.login_success),
 					Toast.LENGTH_SHORT).show();
 			// PictureReceiver albumReceiver = new AlbumReceiver(mPhoneId);
 
@@ -90,7 +79,6 @@ public class PicsAppActivity extends Activity {
 			// }
 		}
 	}
-
 
 	/**
 	 * Méthode appelée lors d'un clic sur le bouton pour envoyer une nouvelle
@@ -170,52 +158,21 @@ public class PicsAppActivity extends Activity {
 				mSelectedImagePath = getPathFromIntent(data);
 			}
 
-			// if (mAlbum.containsPicture(new Picture(mSelectedImagePath))) {
-			// Toast.makeText(getApplicationContext(), "Deja dedans",
-			// Toast.LENGTH_SHORT).show();
-			// } else {
 			// Ajoute la nouvelle image à l'album
 			if (mSelectedImagePath != null) {
 				Toast.makeText(getApplicationContext(), mSelectedImagePath,
 						Toast.LENGTH_SHORT).show();
-				// addPicture(mSelectedImagePath);
-				// mSelectedImagePath = null;
-				editPictureBeforeSending();
+				// editPictureBeforeSending();
+				Intent sendPictureIntent = new Intent(this,
+						SendPictureActivity.class);
+
+				sendPictureIntent.putExtra("SelectedImage", mSelectedImagePath);
+				startActivity(sendPictureIntent);
 			} else {
-				Toast.makeText(getApplicationContext(),"No image found",
+				Toast.makeText(getApplicationContext(), "No image found",
 						Toast.LENGTH_SHORT).show();
 			}
-			// }
 		}
-	}
-	
-	/**
-	 * Montre l'image avec son commentaires, edite le commentaire et liste déroulante pour
-	 * choisir l'utilisateur à qui envoyer l'image
-	 */
-	public void editPictureBeforeSending(){
-		setContentView(R.layout.edit_before_sending);
-		EditText edit_comment = (EditText) findViewById(R.id.edit_comment);
-		ImageView edit_image = (ImageView) findViewById(R.id.edit_imageview);
-		Bitmap bmImg = BitmapFactory.decodeFile(mSelectedImagePath);
-
-		edit_image.setImageBitmap(bmImg);
-		String comment = getComment(mSelectedImagePath);
-		if(comment != null){
-			edit_comment.setText(comment);
-		} else {
-			edit_comment.setText(R.string.new_comment);
-		}
-		
-		// TODO: add list of users
-	}
-	
-	/**
-	 * Envoie l'image au serveur...
-	 */
-	public void sendPicture(View v){
-		// TODO
-		// 1. save last comment entered by the user
 	}
 
 	/**
@@ -261,6 +218,13 @@ public class PicsAppActivity extends Activity {
 		return path;
 	}
 
+	/**
+	 * Crée un dialogue ayant un titre et un bouton pour valider l'input
+	 * 
+	 * @param dialogTitle
+	 *            le titre à assigner au dialogue
+	 * @return le dialogue créé
+	 */
 	private AlertDialog createInputDialog(String dialogTitle) {
 		Context context = PicsAppActivity.this;
 		LayoutInflater li = LayoutInflater.from(context);
@@ -336,37 +300,4 @@ public class PicsAppActivity extends Activity {
 		// Affiche le dialogue
 		registrationDialog.show();
 	}
-	
-	  /** 
-     * Cette méthode écrit un commentaire dans une image en ajoutant
-     * un tag EXIF.
-     */
-    public boolean setComment(String imageName, String comment){
-    	
-		try {
-			ExifInterface exif = new ExifInterface(imageName);
-			exif.setAttribute(EXIF_TAG, comment);
-	    	exif.saveAttributes();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-    	
-    }
-    /**
-     * Cette méthode lit le tag EXIF représentant le commentaire inclu
-     * dans l'image
-     */
-    public String getComment(String imageName){
-    	String comment = null;
-    	try {
-			ExifInterface exif = new ExifInterface(imageName);
-			comment = exif.getAttribute(EXIF_TAG);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-		return comment;
-    }
 }

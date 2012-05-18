@@ -1,63 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">PicsApp</string>
-    <string name="voir_albums">Voir les albums</string>
-    <string name="envoyer_photo">Envoyer une image</string>
+	<string name="app_name">PicsApp</string>
+	<string name="envoyer_photo">Envoyer une image</string>
 
-    <!-- Voir les albums -->
-    <string name="view_albums_drafts">Brouillons</string>
-    <string name="view_albums_sent">Envoyés</string>
-    <string name="view_albums_received">Reçus</string>
+	<!-- Voir les albums -->
+	<string name="view_albums_sent">Envoyés</string>
+	<string name="view_albums_received">Reçus</string>
 
-    <!-- User -->
-    <string name="username_hint">Nom d\'utilisateur</string>
-    <string name="accountcreate_invalidusername">Nom d\'utilisateur invalide. Les espaces ne sont
-		pas admis.</string>
-    <string name="email_hint">Adresse mail</string>
-    <string name="accountcreate_invalidemail">Adresse e-mail invalide. Les espaces ne sont
-		pas admis.</string>
-    <string name="password_hint">Mot de passe</string>
-    <string name="accountcreate_invalidpassword">Mot de passe invalide.</string>
-    <string name="accountcreate_buttonlabel">Valider</string>
-    <string name="accountcreate_failure">Echec de l\'enregistrement.</string>
-    <string name="choisir_util">Choisir un destinataire</string>
+	<!-- User -->
+	<string name="username_hint">Nom d\'utilisateur</string>
+	<string name="accountcreate_invalidusername">Nom d\'utilisateur invalide. Les espaces ne sont
+		pas admis.
+	</string>
+	<string name="accountcreate_buttonlabel">Valider</string>
+	<string name="accountcreate_failure">Echec de l\'enregistrement.</string>
+	<string name="login_success">Enregistrement effectué</string>
 
-    <!-- Nouvel album -->
-    <string name="ajouter_photo">Ajouter une photo</string>
-    <string name="galerie">Choisir dans la galerie</string>
-    <string name="prendre_photo">Prendre une photo</string>
-    <string name="envoyer_album">Envoyer l\'album</string>
-    <string name="supprimer_album">Supprimer l\'album</string>
-    <string name="supprimer_album_confirmation">Supprimer l\'album?</string>
-    <string name="supprimer_album_succes">Album supprimé</string>
-    <string name="supprimer_album_erreur">Erreur de suppression de l\'album</string>
-    <string name="album_deja_existant">Un album du même nom existe déjà.</string>
-    <string name="album_image_deja_existante">La même image figure déjà dans l\'album.</string>
-    <string name="confirmer">Ok</string>
-    <string name="annuler">Annuler</string>
+	<!-- Nouvelle photo -->
+	<string name="ajouter_photo">Ajouter une photo</string>
+	<string name="choisir_destinataire">Choisissez un destinataire</string>
+	<string name="galerie">Choisir dans la galerie</string>
+	<string name="prendre_photo">Prendre une photo</string>
+	<string name="confirmer">Envoyer</string>
+	<string name="annuler">Annuler</string>
+	<string name="commentaire">Commentaire</string>
+	<string name="receiver_prompt">Choisir un destinataire</string>
 
-    <!-- Dialogue pour s'enregistrer -->
-    <string name="registration_dialog_title">Enregistrement</string>
-    <string name="accountcreate_username_taken">Ce nom d\'utilisateur n\'est pas disponible</string>
-
-    <!-- Dialogue pour créer un nouvel album -->
-    <string name="new_album_dialog_title">Créer un nouvel album</string>
-    <string name="new_album_dialog_hint">Titre du nouvel album</string>
-    <string name="new_album_dialog_empty_title">Le titre ne peut pas être vide!</string>
-    <string name="new_album_activity_save">Commentaire sauvegardé.</string>
-    <string name="new_album_activity_share">Album envoyé.</string>
-    <string name="new_album_activity_share_failed">Envoi impossible.</string>
-    <string name="new_album_activity_save_album">Album enregistré.</string>
-    <string name="new_album_activity_delete">Photo supprimée.</string>
-
-    <!-- Options menu pour créer un nouvel album -->
-    <string name="new_album_menu_add">Ajouter une photo</string>
-    <string name="new_album_menu_share">Envoyer l\'album</string>
-    <string name="new_album_menu_save">Sauvegarder l\'album</string>
-    <string name="new_album_menu_delete">Supprimer l\'album</string>
-    <string name="new_album_menu_edit">Editer l\'album</string>
-    <string name="new_album_activity_empty">L\'album est vide.</string>
-    <string name="new_comment">Commentaire</string>
+	<!-- Dialogue pour s'enregistrer -->
+	<string name="registration_dialog_title">Enregistrement</string>
+	<string name="accountcreate_username_taken">Ce nom d\'utilisateur n\'est pas disponible
+	</string>
 
 </resources>

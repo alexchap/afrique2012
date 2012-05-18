@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/scroll"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent" >
 
     <LinearLayout
         android:id="@+id/linear_game_layout"
@@ -14,22 +14,40 @@
             android:id="@+id/edit_imageview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:adjustViewBounds="true"
             android:maxHeight="300dp"
-            android:adjustViewBounds="true" />
+            android:paddingBottom="10dip"
+            android:paddingTop="10dip" />
 
         <EditText
             android:id="@+id/edit_comment"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:hint="@string/commentaire"
+            android:inputType="textMultiLine" />
 
         <!-- Ajouter ici : liste déroulante choix utilisateurs -->
 
-        <Button
-            android:id="@+id/edit_send_button"
+        <TextView
+            android:id="@+id/edit_textview"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:text="@string/choisir_destinataire" />
+
+        <Spinner
+            android:id="@+id/edit_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:prompt="@string/receiver_prompt" />
+
+        <Button
+            android:id="@+id/edit_send_button"
+            android:layout_width="100dip"
+            android:layout_height="fill_parent"
+            android:layout_gravity="right"
             android:onClick="sendPicture"
             android:text="@string/confirmer" />
     </LinearLayout>
+
 </ScrollView>
