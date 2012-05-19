@@ -138,6 +138,16 @@ public class PicsAppActivity extends Activity {
 		// Affiche le dialogue à l'écran
 		newAlbumDialog.show();
 	}
+	
+	/**
+	 * Méthode appelée lors d'un clic sur le bouton pour voir les images
+	 * 
+	 * @param v
+	 */
+	public void seePictures(View v) {
+		Intent i = new Intent(getApplicationContext(), ViewFoldersActivity.class);
+		startActivity(i);
+	}
 
 	/**
 	 * Traite les résultats retournés par les activités externes appelées,

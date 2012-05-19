@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/view_images_activity_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/aucune_photo"
+        android:textAppearance="@android:style/TextAppearance.Medium" />
+
+    <Gallery
+        android:id="@+id/view_images_activity_gallery"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/view_images_activity_description"
+        android:layout_alignParentTop="true" >
+    </Gallery>
+
+    <TextView
+        android:id="@+id/view_images_activity_description"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingTop="10dip"
+        android:paddingBottom="10dip"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

@@ -25,6 +25,21 @@
             android:name="org.android.activities.SendPictureActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:configChanges="orientation"
+            android:name="org.android.activities.ViewFoldersActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:configChanges="orientation"
+            android:name="org.android.activities.ViewFolderContentActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:configChanges="orientation"
+            android:name="org.android.activities.ViewImagesActivity"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" >

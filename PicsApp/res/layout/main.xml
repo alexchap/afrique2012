@@ -15,15 +15,13 @@
         android:paddingRight="4.0dip"
         android:paddingTop="5.0dip" >
 
-        <!--
-             <Button
+        <Button
             android:id="@+id/main_view_albums"
             android:layout_width="0.0dip"
             android:layout_height="fill_parent"
             android:layout_weight="1.0"
-            android:text="@string/voir_albums"
-            android:onClick="viewAlbums" />
-        -->
+            android:onClick="seePictures"
+            android:text="@string/voir_photos" />
 
         <Button
             android:id="@+id/main_send_picture"

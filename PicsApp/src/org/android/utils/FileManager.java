@@ -1,8 +1,15 @@
 package org.android.utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+
+import android.graphics.Picture;
+import android.util.Log;
 
 /**
  * Gestionnaire de fichiers de l'application. Prend en charge toutes les
@@ -16,12 +23,13 @@ import java.util.ArrayList;
 public class FileManager {
 	/** Dossier principal de l'application */
 	public final static String APP_FOLDER_PATH = "/sdcard/PicsApp/";
-
-	/**
-	 * Dossier contenant les albums créés par l'utilisateur mais qui n'ont pas
-	 * encore été envoyés.
-	 */
-	public final static String SAVED_FOLDER_PATH = APP_FOLDER_PATH + "saved/";
+	//
+	// /**
+	// * Dossier contenant les albums créés par l'utilisateur mais qui n'ont pas
+	// * encore été envoyés.
+	// */
+	// public final static String SAVED_FOLDER_PATH = APP_FOLDER_PATH +
+	// "saved/";
 
 	/** Dossier contenant les albums envoyés par l'utilisateur */
 	public final static String SENT_FOLDER_PATH = APP_FOLDER_PATH + "sent/";
@@ -47,56 +55,53 @@ public class FileManager {
 		}
 	}
 
-//	/**
-//	 * Enregistre un album dans le dossier "saved"
-//	 * 
-//	 * @param album
-//	 *            L'album à enregistrer
-//	 */
-//	public void saveAlbum(Album album, String folderName) {
-//		// Vérifie si le chemin correspond à l'un de nos dossiers.
-//		verifyPath(folderName);
-//
-//		// Le dossier où enregistrer l'album.
-//		File directory = new File(folderName);
-//		directory.mkdirs();
-//
-//		// L'album à sauver.
-//		File newAlbum = new File(directory.getPath(), album.getTitle());
-//
-//		FileOutputStream fos = null;
-//
-//		try {
-//			fos = new FileOutputStream(newAlbum);
-//		} catch (FileNotFoundException e1) {
-//			Log.d("FILEMANAGER",
-//					"IO Exeption while creating fileOutPutStream (save new album)");
-//			e1.printStackTrace();
-//		} finally {
-//			try {
-//				if (fos != null) {
-//					fos.close();
-//				}
-//			} catch (IOException e) {
-//				Log.d("FILEMANAGER",
-//						"IO Exeption while closing file (save new album)");
-//				e.printStackTrace();
-//			}
-//		}
-//
-//		try {
-//			mPrinter = new PrintWriter(new FileWriter(newAlbum));
-//
-//			for (Picture p : album.getPictures()) {
-//				mPrinter.println(p.getPath() + "::" + p.getDescription());
-//				mPrinter.flush();
-//			}
-//
-//		} catch (IOException e) {
-//			Log.d("FILEMANAGER", "Io Exception while writing");
-//			e.printStackTrace();
-//		}
-//	}
+	/**
+	 * Enregistre un album dans le dossier "saved"
+	 * 
+	 * @param album
+	 *            L'album à enregistrer
+	 */
+	public void savePicture(String folderName, String user, String path) {
+		// Vérifie si le chemin correspond à l'un de nos dossiers.
+		verifyPath(folderName);
+
+		// Le dossier où enregistrer l'album.
+		File directory = new File(folderName);
+		directory.mkdirs();
+
+		// L'album à sauver.
+		File newAlbum = new File(directory.getPath(), user);
+
+		FileOutputStream fos = null;
+
+		try {
+			fos = new FileOutputStream(newAlbum);
+		} catch (FileNotFoundException e1) {
+			Log.d("FILEMANAGER",
+					"IO Exeption while creating fileOutPutStream (save new album)");
+			e1.printStackTrace();
+		} finally {
+			try {
+				if (fos != null) {
+					fos.close();
+				}
+			} catch (IOException e) {
+				Log.d("FILEMANAGER",
+						"IO Exeption while closing file (save new album)");
+				e.printStackTrace();
+			}
+		}
+
+		try {
+			mPrinter = new PrintWriter(new FileWriter(newAlbum));
+			mPrinter.println(path);
+			mPrinter.flush();
+
+		} catch (IOException e) {
+			Log.d("FILEMANAGER", "Io Exception while writing");
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Supprimer un album du dossier spécifié en paramètre.
@@ -249,9 +254,10 @@ public class FileManager {
 	 *            Le chemin à vérifier.
 	 */
 	public void verifyPath(String folderName) {
-		if (!(folderName.equals(SAVED_FOLDER_PATH)
-				|| folderName.equals(SENT_FOLDER_PATH) || folderName
-					.equals(RECEIVED_FOLDER_PATH))) {
+		if (!(/*
+			 * folderName.equals(SAVED_FOLDER_PATH) ||
+			 */folderName.equals(SENT_FOLDER_PATH) || folderName
+				.equals(RECEIVED_FOLDER_PATH))) {
 			throw new IllegalArgumentException();
 		}
 	}
