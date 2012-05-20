@@ -84,4 +84,25 @@ public final class R {
          */
         public static final int voir_photos=0x7f040011;
     }
+    public static final class styleable {
+        /** Attributes that can be used with a PictureGallery.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #PictureGallery_android_galleryItemBackground org.android:android_galleryItemBackground}</code></td><td></td></tr>
+           </table>
+           @see #PictureGallery_android_galleryItemBackground
+         */
+        public static final int[] PictureGallery = {
+            0x0101004c
+        };
+        /**
+          <p>This symbol is the offset where the {@link org.android.R.attr#android_galleryItemBackground}
+          attribute's value can be found in the {@link #PictureGallery} array.
+          @attr name android:android_galleryItemBackground
+        */
+        public static final int PictureGallery_android_galleryItemBackground = 0;
+    };
 }

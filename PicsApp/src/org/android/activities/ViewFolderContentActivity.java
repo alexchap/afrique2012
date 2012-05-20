@@ -130,7 +130,7 @@ public class ViewFolderContentActivity extends ListActivity {
 		mCurrentFolder = (String) extras
 				.get(ViewFoldersActivity.TO_DISPLAY_FOLDER_CODE);
 
-		mUsers = mFileManager.retrieveAlbumsInFolder(mCurrentFolder);
+		mUsers = mFileManager.retrievePicturesInFolder(mCurrentFolder);
 	}
 
 	/**

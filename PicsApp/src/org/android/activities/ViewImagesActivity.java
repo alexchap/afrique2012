@@ -1,7 +1,11 @@
 package org.android.activities;
 
+import java.util.ArrayList;
+
 import org.android.R;
 import org.android.utils.FileManager;
+import org.android.utils.ImageAdapter;
+import org.android.utils.Utils;
 
 import android.app.Activity;
 import android.database.Cursor;
@@ -9,6 +13,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Gallery;
 import android.widget.TextView;
 
@@ -33,6 +40,8 @@ public class ViewImagesActivity extends Activity {
 	private String mCurrentFolder = "";
 	/** Utilisateur dont les images sont affichées */
 	private String mUser = "";
+	/** L'album que représente la galerie */
+	private ArrayList<String> mPictures;
 
 	/** Appelée à la création de l'activité */
 	@Override
@@ -50,39 +59,40 @@ public class ViewImagesActivity extends Activity {
 		mCenteredText = (TextView) findViewById(R.id.view_images_activity_empty);
 
 		mFileManager = new FileManager();
+		mPictures = mFileManager.retrievePictures(mUser, mCurrentFolder);
 
 		refreshView(0);
 	}
 
 	/** Rafraîchit la view */
 	public void refreshView(int positionToDisplay) {
-		// if (mAlbum != null && !mAlbum.isEmpty()) {
-		//
-		// mGallery = (Gallery) findViewById(R.id.view_album_activity_gallery);
-		// ImageAdapter imageAdapter = new ImageAdapter(this, mAlbum);
-		// mGallery.setAdapter(imageAdapter);
-		//
-		// mGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
-		//
-		// public void onItemSelected(AdapterView<?> arg0, View arg1,
-		// int position, long arg3) {
-		// mText.setText(mAlbum.getPicture(position).getDescription());
-		// mText.invalidate();
-		// }
-		//
-		// public void onNothingSelected(AdapterView<?> arg0) {
-		//
-		// }
-		//
-		// });
-		//
-		// mGallery.setSelection(positionToDisplay);
-		// mText.setVisibility(View.VISIBLE);
-		// mCenteredText.setVisibility(View.GONE);
-		// } else {
-		// mText.setVisibility(View.GONE);
-		// mCenteredText.setVisibility(View.VISIBLE);
-		// }
+		if (mPictures != null && !mPictures.isEmpty()) {
+
+			mGallery = (Gallery) findViewById(R.id.view_images_activity_gallery);
+			ImageAdapter imageAdapter = new ImageAdapter(this, mPictures);
+			mGallery.setAdapter(imageAdapter);
+
+			mGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+				public void onItemSelected(AdapterView<?> arg0, View arg1,
+						int position, long arg3) {
+					mText.setText(Utils.getComment(mPictures.get(position)));
+					mText.invalidate();
+				}
+
+				public void onNothingSelected(AdapterView<?> arg0) {
+
+				}
+
+			});
+
+			mGallery.setSelection(positionToDisplay);
+			mText.setVisibility(View.VISIBLE);
+			mCenteredText.setVisibility(View.GONE);
+		} else {
+			mText.setVisibility(View.GONE);
+			mCenteredText.setVisibility(View.VISIBLE);
+		}
 	}
 
 	/**

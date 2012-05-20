@@ -32,7 +32,7 @@
 	<string name="aucune_photo">Il n\'y a aucune photo à afficher!</string>
 	<string name="supprimer_images_confirmation_début">Supprimer toutes les images</string>
 	<string name="supprimer_images_confirmation_fin">cet utilisateur?</string>
-	<string name="supprimer_images_confirmer">Confirmer</string>
+	<string name="supprimer_images_confirmer">Supprimer</string>
 	<string name="supprimer_images_succes">Images supprimées!</string>
 		
 	<!-- Dialogue pour s'enregistrer -->
