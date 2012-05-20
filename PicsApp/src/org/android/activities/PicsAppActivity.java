@@ -17,14 +17,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 /**
  * Activité principale de l'application, qui propose à l'utilisateur d'envoyer
- * une photo
+ * une photo ou d'afficher les photos envoyées/reçues
  * 
  * @author Elodie
  * @author Oriane
@@ -39,9 +38,6 @@ public class PicsAppActivity extends Activity {
 
 	/** id du téléphone */
 	public static String mPhoneId;
-
-	/** Exif tag pour le commentaire d'une image */
-	final String EXIF_TAG = "UserComment";
 
 	/** Le chemin d'accès de l'image sélectionnée */
 	private String mSelectedImagePath;
@@ -162,9 +158,10 @@ public class PicsAppActivity extends Activity {
 	 */
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
-			// Résultat de la part de l'appareil photo ou de la galerie
-			if (requestCode == Utils.TAKE_PICTURE
-					|| requestCode == Utils.SELECT_PICTURE) {
+			/* Résultat de la part de la galerie (si prise par l'appareil photo, 
+			 * alors le chemin vers l'image est déjà défini !)
+			 */
+			if (requestCode == Utils.SELECT_PICTURE) {
 				mSelectedImagePath = getPathFromIntent(data);
 			}
 
@@ -172,14 +169,13 @@ public class PicsAppActivity extends Activity {
 			if (mSelectedImagePath != null) {
 				Toast.makeText(getApplicationContext(), mSelectedImagePath,
 						Toast.LENGTH_SHORT).show();
-				// editPictureBeforeSending();
 				Intent sendPictureIntent = new Intent(this,
 						SendPictureActivity.class);
 
 				sendPictureIntent.putExtra("SelectedImage", mSelectedImagePath);
 				startActivity(sendPictureIntent);
 			} else {
-				Toast.makeText(getApplicationContext(), "No image found",
+				Toast.makeText(getApplicationContext(), getString(R.string.image_introuvable),
 						Toast.LENGTH_SHORT).show();
 			}
 		}
@@ -228,36 +224,15 @@ public class PicsAppActivity extends Activity {
 		return path;
 	}
 
-	/**
-	 * Crée un dialogue ayant un titre et un bouton pour valider l'input
-	 * 
-	 * @param dialogTitle
-	 *            le titre à assigner au dialogue
-	 * @return le dialogue créé
-	 */
-	private AlertDialog createInputDialog(String dialogTitle) {
-		Context context = PicsAppActivity.this;
-		LayoutInflater li = LayoutInflater.from(context);
-		/*
-		 * Crée un dialogue avec un EditText à partir du xml
-		 */
-		View simpleDialogView = li.inflate(R.layout.input_dialog, null);
-
-		AlertDialog.Builder inputDialogBuilder = new AlertDialog.Builder(
-				context);
-		inputDialogBuilder.setTitle(dialogTitle);
-		inputDialogBuilder.setView(simpleDialogView);
-		AlertDialog inputDialog = inputDialogBuilder.create();
-		return inputDialog;
-	}
+	
 
 	/**
 	 * Crée et affiche le dialogue d'enregistrement
 	 */
 	private void showRegistrationDialog() {
 		final Context mContext = PicsAppActivity.this;
-		AlertDialog registrationDialog = createInputDialog(getResources()
-				.getString(R.string.registration_dialog_title));
+		AlertDialog registrationDialog = Utils.createInputDialog(getResources()
+				.getString(R.string.registration_dialog_title),PicsAppActivity.this);
 
 		registrationDialog
 				.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -294,7 +269,7 @@ public class PicsAppActivity extends Activity {
 							if (communicationHandler.registerUser(userName,
 									mPhoneId)) {
 								Toast.makeText(getApplicationContext(),
-										"Enregistrement réussi!",
+										getString(R.string.login_success),
 										Toast.LENGTH_SHORT).show();
 							} else {
 								Toast.makeText(

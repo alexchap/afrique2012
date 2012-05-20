@@ -1,0 +1,8 @@
+#! /usr/bin/perl
+
+my @deleted = `git ls-files -d`;
+foreach my $elem (@deleted) {
+chomp $elem;
+print $elem."\n";
+`git rm '$elem'`;
+}

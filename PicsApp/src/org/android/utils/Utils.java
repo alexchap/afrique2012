@@ -2,9 +2,14 @@ package org.android.utils;
 
 import java.io.IOException;
 
+import org.android.R;
+
+import android.app.AlertDialog;
 import android.content.Context;
 import android.media.ExifInterface;
 import android.telephony.TelephonyManager;
+import android.view.LayoutInflater;
+import android.view.View;
 
 public class Utils {
 	// Récupère l'identificateur du téléphone
@@ -59,4 +64,29 @@ public class Utils {
 		}
 		return comment;
 	}
+	
+	/**
+	 * Crée un dialogue ayant un titre et un bouton pour valider l'input
+	 * 
+	 * @param dialogTitle
+	 *            le titre à assigner au dialogue
+	 * @param context le contexte (activité)
+	 * @return le dialogue créé
+	 */
+	public static AlertDialog createInputDialog(String dialogTitle, Context context) {
+
+		LayoutInflater li = LayoutInflater.from(context);
+		/*
+		 * Crée un dialogue avec un EditText à partir du xml
+		 */
+		View simpleDialogView = li.inflate(R.layout.input_dialog, null);
+
+		AlertDialog.Builder inputDialogBuilder = new AlertDialog.Builder(
+				context);
+		inputDialogBuilder.setTitle(dialogTitle);
+		inputDialogBuilder.setView(simpleDialogView);
+		AlertDialog inputDialog = inputDialogBuilder.create();
+		return inputDialog;
+	}
 }
+

@@ -1,6 +1,5 @@
 package org.android.activities;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.android.R;
@@ -11,7 +10,6 @@ import org.android.utils.Utils;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.ExifInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -20,8 +18,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 /**
- * Activité principale de l'application, qui propose à l'utilisateur d'envoyer
- * une photo
+ * Activité qui permet d'éditer les informations d'une image avant de
+ * pouvoir l'envoyer à un utilisateur
  * 
  * @author Elodie
  * @author Oriane
@@ -39,8 +37,10 @@ public class SendPictureActivity extends Activity {
 
 	/** Le chemin d'accès de l'image sélectionnée */
 	private String mSelectedImagePath;
-
+	
+	/** La liste déroulante pour afficher sélectionner un utilisateur */
 	private Spinner spinner;
+	
 	/** Champ de texte éditable pour le commentaire */
 	private EditText mEditComment;
 

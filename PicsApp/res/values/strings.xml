@@ -8,7 +8,7 @@
 	<string name="view_albums_sent">Envoyées</string>
 	<string name="view_albums_received">Reçues</string>
 
-	<!-- User -->
+	<!-- Utilisateur -->
 	<string name="username_hint">Nom d\'utilisateur</string>
 	<string name="accountcreate_invalidusername">Nom d\'utilisateur invalide. Les espaces ne sont
 		pas admis.
@@ -26,6 +26,7 @@
 	<string name="annuler">Annuler</string>
 	<string name="commentaire">Commentaire</string>
 	<string name="receiver_prompt">Choisir un destinataire</string>
+	<string name="image_introuvable">Problème : Aucune image trouvée !</string>
 
 	<!-- Voir Photos -->
 	<string name="voir_photos">Voir les photos</string>
