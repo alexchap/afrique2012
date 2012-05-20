@@ -5,17 +5,22 @@ import java.util.Calendar;
 
 import org.android.R;
 import org.android.communication.CommunicationHandler;
+import org.android.communication.PictureReceiver;
 import org.android.utils.FileManager;
 import org.android.utils.Utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
@@ -30,9 +35,6 @@ import android.widget.Toast;
  * 
  */
 public class PicsAppActivity extends Activity {
-	/** File manager */
-	private FileManager mFileManager;
-
 	/** Communication Handler */
 	private CommunicationHandler mCommHandler;
 
@@ -55,7 +57,6 @@ public class PicsAppActivity extends Activity {
 	/** Initialise la vue */
 	private void initialize() {
 		// File Manager
-		mFileManager = new FileManager();
 		mCommHandler = CommunicationHandler.getInstance();
 
 		// Vérifie que l'utilisateur est enregistré
@@ -65,15 +66,48 @@ public class PicsAppActivity extends Activity {
 			Toast.makeText(getApplicationContext(),
 					getResources().getString(R.string.login_success),
 					Toast.LENGTH_SHORT).show();
-			// PictureReceiver albumReceiver = new AlbumReceiver(mPhoneId);
 
-			// if (albumReceiver.checkReceivedAlbums()) {
-			// Toast.makeText(this, albumReceiver.getAlbum().toString(),
-			// Toast.LENGTH_SHORT).show();
-			//
-			// createNotification(this, "plop", albumReceiver.getAlbum());
-			// }
+			new Thread((new Runnable() {
+				public void run() {
+					PictureReceiver pictureReceiver = new PictureReceiver(
+							mPhoneId);
+
+					if (pictureReceiver.checkReceivedPictures()) {
+
+						int numberReceived = pictureReceiver.getSize();
+
+						pictureReceiver.getImages();
+
+						for (int i = 0; i < numberReceived; i++) {
+							createNotification(PicsAppActivity.this);
+						}
+					}
+				}
+			})).start();
+
 		}
+	}
+
+	public void createNotification(Context context) {
+		NotificationManager notificationManager = (NotificationManager) context
+				.getSystemService(Context.NOTIFICATION_SERVICE);
+		Notification notification = new Notification(R.drawable.ic_app,
+				"Nouvelle image reçue.", System.currentTimeMillis());
+
+		// Cacher la notification lorsque l'utilisateur a cliqué dessus
+		notification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+		Intent viewFolderIntent = new Intent(PicsAppActivity.this,
+				ViewFolderContentActivity.class);
+		viewFolderIntent.putExtra(ViewFoldersActivity.TO_DISPLAY_FOLDER_CODE,
+				FileManager.RECEIVED_FOLDER_PATH);
+		viewFolderIntent.putExtra("CallingActivity", "Notification");
+
+		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+				viewFolderIntent, 0);
+		notification.setLatestEventInfo(context, "PicsApp",
+				"Vous avez reçu une nouvelle image!", pendingIntent);
+		notificationManager.notify(0, notification);
 	}
 
 	/**
@@ -130,18 +164,19 @@ public class PicsAppActivity extends Activity {
 							}
 						});
 		// Crée le dialogue
-		AlertDialog newAlbumDialog = builder.create();
+		AlertDialog newPictureDialog = builder.create();
 		// Affiche le dialogue à l'écran
-		newAlbumDialog.show();
+		newPictureDialog.show();
 	}
-	
+
 	/**
 	 * Méthode appelée lors d'un clic sur le bouton pour voir les images
 	 * 
 	 * @param v
 	 */
 	public void seePictures(View v) {
-		Intent i = new Intent(getApplicationContext(), ViewFoldersActivity.class);
+		Intent i = new Intent(getApplicationContext(),
+				ViewFoldersActivity.class);
 		startActivity(i);
 	}
 
@@ -165,7 +200,8 @@ public class PicsAppActivity extends Activity {
 				mSelectedImagePath = getPathFromIntent(data);
 			}
 
-			// Ajoute la nouvelle image à l'album
+			// Lance une intent qui va afficher l'image et permettre à
+			// l'utilisateur de rajouter un commentaire
 			if (mSelectedImagePath != null) {
 				Toast.makeText(getApplicationContext(), mSelectedImagePath,
 						Toast.LENGTH_SHORT).show();
@@ -252,8 +288,8 @@ public class PicsAppActivity extends Activity {
 						CommunicationHandler communicationHandler = CommunicationHandler
 								.getInstance();
 
-						AlertDialog newAlbumDialog = (AlertDialog) dialog;
-						EditText inputDialogEditText = (EditText) newAlbumDialog
+						AlertDialog newPictureDialog = (AlertDialog) dialog;
+						EditText inputDialogEditText = (EditText) newPictureDialog
 								.findViewById(R.id.input_dialog_edittext);
 
 						if (inputDialogEditText == null

@@ -4,9 +4,9 @@
 	<string name="app_name">PicsApp</string>
 	<string name="envoyer_photo">Envoyer une image</string>
 
-	<!-- Voir les albums -->
-	<string name="view_albums_sent">Envoyées</string>
-	<string name="view_albums_received">Reçues</string>
+	<!-- Voir les photos -->
+	<string name="view_pictures_sent">Envoyées</string>
+	<string name="view_pictures_received">Reçues</string>
 
 	<!-- Utilisateur -->
 	<string name="username_hint">Nom d\'utilisateur</string>
@@ -28,6 +28,12 @@
 	<string name="receiver_prompt">Choisir un destinataire</string>
 	<string name="image_introuvable">Problème : Aucune image trouvée !</string>
 
+	<!-- Envoi -->
+	<string name="patienter">Veuillez patienter</string>
+	<string name="envoi_en_cours">Envoi de l\'image en cours...</string>
+	<string name="envoi_reussi">Envoi réussi!</string>
+	<string name="envoi_failed">Une erreur s\'est produite.</string>
+
 	<!-- Voir Photos -->
 	<string name="voir_photos">Voir les photos</string>
 	<string name="aucune_photo">Il n\'y a aucune photo à afficher!</string>
@@ -35,7 +41,7 @@
 	<string name="supprimer_images_confirmation_fin">cet utilisateur?</string>
 	<string name="supprimer_images_confirmer">Supprimer</string>
 	<string name="supprimer_images_succes">Images supprimées!</string>
-		
+
 	<!-- Dialogue pour s'enregistrer -->
 	<string name="registration_dialog_title">Enregistrement</string>
 	<string name="accountcreate_username_taken">Ce nom d\'utilisateur n\'est pas disponible
