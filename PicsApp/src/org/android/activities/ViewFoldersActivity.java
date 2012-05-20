@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 /**
  * Activité qui affiche les albums reçus et envoyés par un utilisateur.
@@ -26,6 +27,14 @@ public class ViewFoldersActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.view_folders_activity);
+
+		try {
+			if (getIntent().getExtras().containsKey("CallingActivity")) {
+				Toast.makeText(this, "lol", Toast.LENGTH_SHORT).show();
+			}
+		} catch (NullPointerException npe) {
+
+		}
 	}
 
 	/**

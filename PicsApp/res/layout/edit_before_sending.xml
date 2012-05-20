@@ -25,7 +25,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:hint="@string/commentaire"
-            android:inputType="textMultiLine" />
+            android:inputType="textMultiLine"
+            android:capitalize="sentences" />
 
         <!-- Ajouter ici : liste déroulante choix utilisateurs -->
 

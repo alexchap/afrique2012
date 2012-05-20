@@ -51,28 +51,34 @@ public final class R {
         public static final int accountcreate_buttonlabel=0x7f040006;
         public static final int accountcreate_failure=0x7f040007;
         public static final int accountcreate_invalidusername=0x7f040005;
-        public static final int accountcreate_username_taken=0x7f040018;
+        public static final int accountcreate_username_taken=0x7f04001c;
         /**  Nouvelle photo 
          */
         public static final int ajouter_photo=0x7f040009;
         public static final int annuler=0x7f04000e;
         public static final int app_name=0x7f040000;
-        public static final int aucune_photo=0x7f040012;
+        public static final int aucune_photo=0x7f040016;
         public static final int choisir_destinataire=0x7f04000a;
         public static final int commentaire=0x7f04000f;
         public static final int confirmer=0x7f04000d;
+        public static final int envoi_en_cours=0x7f040012;
+        public static final int envoi_failed=0x7f040014;
+        public static final int envoi_reussi=0x7f040013;
         public static final int envoyer_photo=0x7f040001;
         public static final int galerie=0x7f04000b;
         public static final int login_success=0x7f040008;
+        /**  Envoi 
+         */
+        public static final int patienter=0x7f040011;
         public static final int prendre_photo=0x7f04000c;
         public static final int receiver_prompt=0x7f040010;
         /**  Dialogue pour s'enregistrer 
          */
-        public static final int registration_dialog_title=0x7f040017;
-        public static final int supprimer_images_confirmation_début=0x7f040013;
-        public static final int supprimer_images_confirmation_fin=0x7f040014;
-        public static final int supprimer_images_confirmer=0x7f040015;
-        public static final int supprimer_images_succes=0x7f040016;
+        public static final int registration_dialog_title=0x7f04001b;
+        public static final int supprimer_images_confirmation_début=0x7f040017;
+        public static final int supprimer_images_confirmation_fin=0x7f040018;
+        public static final int supprimer_images_confirmer=0x7f040019;
+        public static final int supprimer_images_succes=0x7f04001a;
         /**  User 
          */
         public static final int username_hint=0x7f040004;
@@ -82,7 +88,7 @@ public final class R {
         public static final int view_albums_sent=0x7f040002;
         /**  Voir Photos 
          */
-        public static final int voir_photos=0x7f040011;
+        public static final int voir_photos=0x7f040015;
     }
     public static final class styleable {
         /** Attributes that can be used with a PictureGallery.

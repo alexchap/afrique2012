@@ -72,7 +72,7 @@ public class FileManager {
 		// Vérifie si le chemin correspond à l'un de nos dossiers.
 		verifyPath(folderName);
 
-		// Le dossier où enregistrer le fichierx.
+		// Le dossier où enregistrer le fichier.
 		File directory = new File(folderName);
 		directory.mkdirs();
 
@@ -87,41 +87,11 @@ public class FileManager {
 			newFile = new File(directory.getPath(), user);
 		}
 
-		FileOutputStream fos = null;
-
 		try {
-			fos = new FileOutputStream(newFile);
-		} catch (FileNotFoundException e1) {
-			Log.d("FileManager",
-					"IO Exeption while creating fileOutPutStream (save new image)");
-			e1.printStackTrace();
-		} finally {
-			try {
-				if (fos != null) {
-					fos.close();
-				}
-			} catch (IOException e) {
-				Log.d("FileManager",
-						"IO Exeption while closing file (save new album)");
-				e.printStackTrace();
-			}
-		}
-
-		try {
-			// mPrinter = new PrintWriter(new FileWriter(newFile, true));
-			// mPrinter.append(path);
-			// mPrinter.flush();
-			// mPrinter.close();
-
-			// Writer output = new BufferedWriter(new OutputStreamWriter(
-			// new FileOutputStream(newFile, true), "UTF-8"));
-			//
-			// output.append(path);
-			// output.close();
-
-			BufferedWriter writer = new BufferedWriter(new FileWriter(
-					newFile.getPath(), true));
-			writer.write(path);
+			FileWriter fstream = new FileWriter(newFile.getPath(), true);
+			BufferedWriter writer = new BufferedWriter(fstream);
+			writer.write("\n" + path + "\n");
+			writer.flush();
 			writer.close();
 
 		} catch (IOException e) {
@@ -214,7 +184,9 @@ public class FileManager {
 					// this statement reads the line from the file and print it
 					// to the console.
 					String picturePath = dis.readLine();
-					pictures.add(picturePath);
+					if (!picturePath.equals("")) {
+						pictures.add(picturePath);
+					}
 				}
 
 				// dispose all the resources after using them.
@@ -237,9 +209,9 @@ public class FileManager {
 	 * Vérifie si un album du même nom existe déjà
 	 * 
 	 * @param name
-	 *            Le nom de l'album pour lequel on veut vérifier l'existance
-	 * @return true si un album du même nom de trouve dans le dossier saved,
-	 *         false sinon.
+	 *            Le nom de l'utilisateur dont on veut vérifier l'existance
+	 * @return true si un dossier d'utilisateur du même nom de trouve dans le
+	 *         dossier saved, false sinon.
 	 */
 	public boolean alreadyExists(String name, String folderName) {
 		boolean alreadyExists = false;
@@ -269,9 +241,7 @@ public class FileManager {
 	 *            Le chemin à vérifier.
 	 */
 	public void verifyPath(String folderName) {
-		if (!(/*
-			 * folderName.equals(SAVED_FOLDER_PATH) ||
-			 */folderName.equals(SENT_FOLDER_PATH) || folderName
+		if (!(folderName.equals(SENT_FOLDER_PATH) || folderName
 				.equals(RECEIVED_FOLDER_PATH))) {
 			throw new IllegalArgumentException();
 		}
