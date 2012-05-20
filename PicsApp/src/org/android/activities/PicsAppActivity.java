@@ -79,7 +79,7 @@ public class PicsAppActivity extends Activity {
 						pictureReceiver.getImages();
 
 						for (int i = 0; i < numberReceived; i++) {
-							createNotification(PicsAppActivity.this);
+							pictureReceiver.createNotification(PicsAppActivity.this);
 						}
 					}
 				}
@@ -88,27 +88,6 @@ public class PicsAppActivity extends Activity {
 		}
 	}
 
-	public void createNotification(Context context) {
-		NotificationManager notificationManager = (NotificationManager) context
-				.getSystemService(Context.NOTIFICATION_SERVICE);
-		Notification notification = new Notification(R.drawable.ic_app,
-				"Nouvelle image reçue.", System.currentTimeMillis());
-
-		// Cacher la notification lorsque l'utilisateur a cliqué dessus
-		notification.flags |= Notification.FLAG_AUTO_CANCEL;
-
-		Intent viewFolderIntent = new Intent(PicsAppActivity.this,
-				ViewFolderContentActivity.class);
-		viewFolderIntent.putExtra(ViewFoldersActivity.TO_DISPLAY_FOLDER_CODE,
-				FileManager.RECEIVED_FOLDER_PATH);
-		viewFolderIntent.putExtra("CallingActivity", "Notification");
-
-		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
-				viewFolderIntent, 0);
-		notification.setLatestEventInfo(context, "PicsApp",
-				"Vous avez reçu une nouvelle image!", pendingIntent);
-		notificationManager.notify(0, notification);
-	}
 
 	/**
 	 * Méthode appelée lors d'un clic sur le bouton pour envoyer une nouvelle
