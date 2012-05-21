@@ -3,7 +3,6 @@ package org.tomcat.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,19 +14,16 @@ import org.tomcat.manager.DbManager;
 import com.google.gson.Gson;
 
 /**
- * Servlet qui retourne tous les utilisateurs présents dans la base de données
+ * Servlet qui vérifie si un utilisateur donnée a reçu de nouvelles photos
  */
-public class GetUsers extends HttpServlet {
+public class CheckNewPictures extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-	/** Tag pour l'id du téléphone */
-
-	private DbManager dbManager = new DbManager();
+	private DbManager mDbManager = new DbManager();
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public GetUsers() {
+	public CheckNewPictures() {
 		super();
 	}
 
@@ -37,13 +33,28 @@ public class GetUsers extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
+		System.out.println("Checking new pictures");
 		String phoneId = request.getParameter(DbManager.PHONEID_TAG);
-		ArrayList<String> users = dbManager.getUsers(phoneId);
-		Collections.sort(users);
+		String pseudo = mDbManager.getUserPseudo(phoneId);
+
+		ArrayList<String> paths = mDbManager.getNewPictures(pseudo);
+
+		int total = paths.size();
+		response.setStatus(total + 1000);
+
 		Gson gson = new Gson();
-		String usersString = gson.toJson(users);
+		String pathsString = gson.toJson(paths);
 
 		PrintWriter out = response.getWriter();
-		out.write(usersString);
+		out.write(pathsString);
 	}
 }

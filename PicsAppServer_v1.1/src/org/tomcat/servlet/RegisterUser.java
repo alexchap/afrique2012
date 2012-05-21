@@ -1,7 +1,6 @@
 package org.tomcat.servlet;
 
 import java.io.IOException;
-import java.sql.Connection;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,55 +11,53 @@ import org.tomcat.manager.DbManager;
 import org.tomcat.manager.FileManager;
 
 /**
- * Servlet permettant d'enregistrer les identifiants des utilisateurs dans la base de données
+ * Servlet permettant d'enregistrer les identifiants des utilisateurs dans la
+ * base de données
  */
 public class RegisterUser extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	/** Tag pour le nom d'utilisateur */
-	private static final String USERNAME_TAG = "USERNAME";
-
-	/** Tag pour l'id du téléphone */
-	private static final String PHONE_ID_TAG = "PHONEID";
-	
-	private DbManager dbManager=new DbManager();
-	private FileManager fileManager=new FileManager(); 
+	private DbManager mDbManager = new DbManager();
+	private FileManager mFileManager = new FileManager();
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public RegisterUser() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
 		int nbLine = -1;
 		boolean isCreate = false;
+		System.out.println("Register server");
 		// Extraction des données de l'utilisateur
-		String user = request.getParameter(USERNAME_TAG);
-		String phoneId = request.getParameter(PHONE_ID_TAG);
+		String user = request.getParameter(DbManager.USERNAME_TAG);
+		String phoneId = request.getParameter(DbManager.PHONEID_TAG);
 		System.out.println(user);
 		System.out.println(phoneId);
 
 		// Vérifie si la paire phoneId et user existe déjà dans la base de
 		// données
-		if (!dbManager.isInDbPseudo(user)) {
+		if (!mDbManager.isInDbPseudo(user)) {
 			// Ajoute l'utilisateur dans la base de données
-			nbLine = dbManager.addUser(user, phoneId);
+			nbLine = mDbManager.addUser(user, phoneId);
 			// Création du dossier dans lequel seront enregistrés
 			// temporairement les albums envoyés par l'utilisateur
-			isCreate = fileManager.createDirectory(user);
+			isCreate = mFileManager.createDirectory(user);
 		}
 
 		// Se mettre d'accord sur les messages de confirmation
@@ -71,7 +68,5 @@ public class RegisterUser extends HttpServlet {
 			// Cas n'a pas pu être créé
 			response.setStatus(HttpServletResponse.SC_CONFLICT);
 		}
-		dbManager.close();
 	}
-
 }

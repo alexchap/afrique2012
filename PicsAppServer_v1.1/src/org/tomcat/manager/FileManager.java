@@ -4,39 +4,73 @@
 package org.tomcat.manager;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 
 /**
  * Classe permettant de gérer les fichiers
+ * 
  * @author alex
- *
+ * 
  */
 public class FileManager {
-	
-	// dossiers des photos du système
-		public static final String DEFAULT_DB_PATH = "C:\\Users\\alex\\Pictures\\";
-		// Dossier où sera enregistré de façon temporaire les album des utilisateurs
-		public static final String DEFAULT_DB_FOLDER = "PicsApp\\";
 
-		/**
-		 * 
-		 */
-		public FileManager() {
-			// TODO Auto-generated constructor stub
+	// Dossier où sera enregistré de façon temporaire les album des utilisateurs
+	public static final String DEFAULT_DB_PATH = "C:\\Users\\alex\\Pictures\\PicsApp\\";
+
+	/**
+	 * 
+	 */
+	public FileManager() {
+	}
+
+	/**
+	 * Crée un dossier dans le repertoire par défaut
+	 * 
+	 * @param name
+	 *            Nom du dossier à créer
+	 * @return Oui, si le dossier est crée avec succès et non dans le cas
+	 *         contraire
+	 */
+	public boolean createDirectory(String name) {
+		String folderPath = DEFAULT_DB_PATH + name;
+		return new File(folderPath).mkdir();
+	}
+
+	// vérifie si un dossier existe
+	public boolean exists(String directory) {
+		return new File(DEFAULT_DB_PATH + directory).exists();
+	}
+
+	/**
+	 * Sauvegarde les images
+	 * 
+	 * @param items
+	 *            Liste des items (images)
+	 * @param subDirPath
+	 *            Nom du dossier où seront sauvegarder les images
+	 * @return Oui, si la sauvegarde s'est fait avec succès
+	 */
+	public boolean saveImageToDisk(DiskFileItem item, String sender, String path) {
+		try {
+			File file = new File(path);
+			FileOutputStream fos = new FileOutputStream(file);
+			fos.write(item.get());
+			fos.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
-		
-		/**
-		 * Crée un dossier dans le repertoire par défaut 
-		 * @param name
-		 * 			Nom du dossier à créer
-		 * @return
-		 * 		Oui, si le dossier est crée avec succès 
-		 * 		et non dans le cas contraire
-		 */
-		public boolean createDirectory(String name) {
-			String folderPath = DEFAULT_DB_PATH + DEFAULT_DB_FOLDER + name;
-			return new File(folderPath).mkdir();
-		}
-		
-
-
+		return true;
+	}
 }

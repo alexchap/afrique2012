@@ -22,6 +22,27 @@
 		<servlet-name>ReceiveImage</servlet-name>
 		<servlet-class>org.tomcat.servlet.ReceiveImage</servlet-class>
 	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ValidateUser</display-name>
+		<servlet-name>ValidateUser</servlet-name>
+		<servlet-class>org.tomcat.servlet.ValidateUser</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		Vérifie si un utilisateur donnée a reçu de nouvelles photos </description>
+		<display-name>CheckNewPictures</display-name>
+		<servlet-name>CheckNewPictures</servlet-name>
+		<servlet-class>org.tomcat.servlet.CheckNewPictures</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		Servlet pour envoyer une image</description>
+		<display-name>SendImage</display-name>
+		<servlet-name>SendImage</servlet-name>
+		<servlet-class>org.tomcat.servlet.SendImage</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>RegisterUser</servlet-name>
 		<url-pattern>/RegisterUser</url-pattern>
@@ -33,6 +54,18 @@
 	<servlet-mapping>
 		<servlet-name>ReceiveImage</servlet-name>
 		<url-pattern>/ReceiveImage</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ValidateUser</servlet-name>
+		<url-pattern>/ValidateUser</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>CheckNewPictures</servlet-name>
+		<url-pattern>/CheckNewPictures</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>SendImage</servlet-name>
+		<url-pattern>/SendImage</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
