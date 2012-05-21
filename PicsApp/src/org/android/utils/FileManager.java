@@ -6,10 +6,8 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import android.util.Log;
@@ -26,13 +24,6 @@ import android.util.Log;
 public class FileManager {
 	/** Dossier principal de l'application */
 	public final static String APP_FOLDER_PATH = "/sdcard/PicsApp/";
-	//
-	// /**
-	// * Dossier contenant les albums créés par l'utilisateur mais qui n'ont pas
-	// * encore été envoyés.
-	// */
-	// public final static String SAVED_FOLDER_PATH = APP_FOLDER_PATH +
-	// "saved/";
 
 	/** Dossier contenant les albums envoyés par l'utilisateur */
 	public final static String SENT_FOLDER_PATH = APP_FOLDER_PATH + "sent/";
@@ -41,9 +32,6 @@ public class FileManager {
 	public final static String RECEIVED_FOLDER_PATH = APP_FOLDER_PATH
 			+ "received/";
 
-	/** The printer writing to the files */
-	private PrintWriter mPrinter;
-
 	/**
 	 * Constructeur créant le dossier principal de l'application s'il n'existe
 	 * pas encore.
@@ -51,11 +39,7 @@ public class FileManager {
 	public FileManager() {
 		// create a File object for the parent directory
 		File picsAppDirectory = new File(APP_FOLDER_PATH);
-		boolean created = picsAppDirectory.mkdirs();
-
-		if (!created) {
-			// String[] children = picsAppDirectory.list();
-		}
+		picsAppDirectory.mkdirs();
 	}
 
 	/**

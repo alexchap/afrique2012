@@ -82,8 +82,8 @@ public class CommunicationHandler {
 
 	private static final int VALID_OLD_USER = 1010;
 	private static final int VALID_NEW_USER = 200;
-	private static final int INVALID_USER = 1030;
-	private static final int NOT_REGISTERED = 1040;
+	// private static final int INVALID_USER = 1030;
+	// private static final int NOT_REGISTERED = 1040;
 
 	private FileManager mFileManager;
 
