@@ -33,7 +33,10 @@
 	<string name="envoi_en_cours">Envoi de l\'image en cours...</string>
 	<string name="envoi_reussi">Envoi réussi!</string>
 	<string name="envoi_failed">Une erreur s\'est produite.</string>
-
+	
+	<!-- Réception -->
+	<string name="recu_nouvelle_image">Vous avez reçu une nouvelle image!</string>
+	<string name="recu_nouvelle_image_short">Nouvelle image reçue</string>
 	<!-- Voir Photos -->
 	<string name="voir_photos">Voir les photos</string>
 	<string name="aucune_photo">Il n\'y a aucune photo à afficher!</string>

@@ -82,8 +82,8 @@ public class CommunicationHandler {
 
 	private static final int VALID_OLD_USER = 1010;
 	private static final int VALID_NEW_USER = 200;
-	private static final int INVALID_USER = 1030;
-	private static final int NOT_REGISTERED = 1040;
+	// private static final int INVALID_USER = 1030;
+	// private static final int NOT_REGISTERED = 1040;
 
 	private FileManager mFileManager;
 
@@ -178,7 +178,7 @@ public class CommunicationHandler {
 
 		httpPost.setEntity(entity);
 		try {
-			HttpResponse response = httpClient.execute(httpPost, localContext);
+			httpClient.execute(httpPost, localContext);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			return false;
@@ -376,7 +376,6 @@ public class CommunicationHandler {
 	public String getImage(String phoneId) {
 		// BufferedReader in = null;
 		String responseString = "";
-		// HttpClient client = new DefaultHttpClient();
 
 		String url = Utils.SERVER_URL + SEND_IMAGE;
 		if (!url.endsWith("?"))
@@ -387,10 +386,6 @@ public class CommunicationHandler {
 
 		String paramString = URLEncodedUtils.format(params, "utf-8");
 		url += paramString;
-		// HttpGet request = new HttpGet(url);
-
-		// Execute la requête
-		// HttpResponse response = client.execute(request);
 
 		try {
 
@@ -419,8 +414,8 @@ public class CommunicationHandler {
 
 			InputStream is = conn.getInputStream();
 
-			String picturePath = pictureDir.getAbsolutePath()
-					+ "/" + contentDisposition;
+			String picturePath = pictureDir.getAbsolutePath() + "/"
+					+ contentDisposition;
 			OutputStream os = new FileOutputStream(picturePath);
 
 			byte[] b = new byte[2048];
@@ -433,8 +428,8 @@ public class CommunicationHandler {
 			is.close();
 			os.close();
 
-			mFileManager.savePicture(FileManager.RECEIVED_FOLDER_PATH,
-					sender, picturePath);
+			mFileManager.savePicture(FileManager.RECEIVED_FOLDER_PATH, sender,
+					picturePath);
 
 		} catch (Exception e) {
 			e.printStackTrace();

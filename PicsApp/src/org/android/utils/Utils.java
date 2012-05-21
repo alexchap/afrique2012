@@ -6,7 +6,10 @@ import org.android.R;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.media.ExifInterface;
+import android.net.Uri;
+import android.os.Environment;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +44,7 @@ public class Utils {
 			ExifInterface exif = new ExifInterface(imagePath);
 			exif.setAttribute(EXIF_TAG, comment);
 			exif.saveAttributes();
+			// FIXME: this only works if the tag is not already defined ! //  bug 2415 and 14772 android
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
@@ -63,6 +67,12 @@ public class Utils {
 			return null;
 		}
 		return comment;
+	}
+	
+	public static void refreshSDcard(Context c){
+		c.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
+				Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
+
 	}
 	
 	/**
