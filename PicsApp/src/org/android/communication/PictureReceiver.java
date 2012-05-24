@@ -34,7 +34,6 @@ public class PictureReceiver {
 	 * Contacter le serveur qui va vérifier s'il y a de nouvelles images à
 	 * recevoir pour cet utilisateur particulier
 	 */
-
 	public boolean checkReceivedPictures() {
 		mPaths = mCommHandler.checkReceivedPicture(mPhoneId);
 		if (mPaths == null) {
