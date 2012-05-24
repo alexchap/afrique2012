@@ -33,6 +33,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
 
 import android.os.Environment;
 import android.util.Log;
@@ -126,6 +127,7 @@ public class CommunicationHandler {
 
 			// Execute la requête
 			HttpResponse response = client.execute(request);
+
 			users = getListFromResponse(response);
 
 		} catch (ClientProtocolException e) {
@@ -156,11 +158,9 @@ public class CommunicationHandler {
 	public boolean send(String phoneID, String dest, String toSend) {
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpContext localContext = new BasicHttpContext();
-		HttpPost httpPost = new HttpPost(Utils.SERVER_URL
-				+ RECEIVE_IMAGE_SERVLET);
+		HttpPost httpPost = new HttpPost(Utils.SERVER_URL + RECEIVE_IMAGE_SERVLET);
 
-		MultipartEntity entity = new MultipartEntity(
-				HttpMultipartMode.BROWSER_COMPATIBLE);
+		MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 
 		try {
 			// Ajoute l'id de l'expéditeur comme première partie de l'entité
@@ -252,8 +252,7 @@ public class CommunicationHandler {
 		}
 	}
 
-	public int executePostWithParams(HttpPost httpPost,
-			List<NameValuePair> params) {
+	public int executePostWithParams(HttpPost httpPost, List<NameValuePair> params) {
 		UrlEncodedFormEntity entity;
 
 		try {
@@ -287,20 +286,8 @@ public class CommunicationHandler {
 		return null;
 	}
 
-	/**
-	 * Récupère le nom d'utilisateur du serveur
-	 * 
-	 * @param phoneId
-	 * @return
-	 */
-	public String getUsername(String phoneId) {
-
-		return "";
-	}
-
 	public ArrayList<String> checkReceivedPicture(String phoneId) {
-		HttpPost httpPost = new HttpPost(Utils.SERVER_URL
-				+ CHECK_NEW_PICTURES_SERVLET);
+		HttpPost httpPost = new HttpPost(Utils.SERVER_URL + CHECK_NEW_PICTURES_SERVLET);
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 
@@ -340,18 +327,9 @@ public class CommunicationHandler {
 		BufferedReader in = null;
 		ArrayList<String> list = null;
 		try {
-			// Récupère les informations renvoyées par le serveur
-			in = new BufferedReader(new InputStreamReader(response.getEntity()
-					.getContent()));
 
-			StringBuffer sb = new StringBuffer("");
-			String line = "";
-			String NL = System.getProperty("line.separator");
-			while ((line = in.readLine()) != null) {
-				sb.append(line + NL);
-			}
-			in.close();
-			String page = sb.toString();
+			// Récupère les informations renvoyées par le serveur
+			String page = EntityUtils.toString(response.getEntity());
 
 			// Désérialise la liste reçue depuis le serveur
 			Gson gson = new Gson();
@@ -392,21 +370,17 @@ public class CommunicationHandler {
 			URL urle = new URL(url);
 			URLConnection conn = urle.openConnection();
 
-			String contentDisposition = conn
-					.getHeaderField("Content-disposition");
+			String contentDisposition = conn.getHeaderField("Content-disposition");
 
 			// Récupère l'expéditeur
 			String senderSep = "sender=";
-			String sender = contentDisposition.substring(contentDisposition
-					.indexOf(senderSep) + senderSep.length());
+			String sender = contentDisposition.substring(contentDisposition.indexOf(senderSep) + senderSep.length());
 			Log.d("sender", sender);
 
 			String filenameSep = "filename=";
 			String end = ", ";
 			contentDisposition = contentDisposition.substring(
-					contentDisposition.indexOf(filenameSep)
-							+ filenameSep.length(),
-					contentDisposition.indexOf(end));
+					contentDisposition.indexOf(filenameSep) + filenameSep.length(), contentDisposition.indexOf(end));
 
 			File sdcard = Environment.getExternalStorageDirectory();
 			File pictureDir = new File(sdcard, "PicsApp");
@@ -414,8 +388,7 @@ public class CommunicationHandler {
 
 			InputStream is = conn.getInputStream();
 
-			String picturePath = pictureDir.getAbsolutePath() + "/"
-					+ contentDisposition;
+			String picturePath = pictureDir.getAbsolutePath() + "/" + contentDisposition;
 			OutputStream os = new FileOutputStream(picturePath);
 
 			byte[] b = new byte[2048];
@@ -428,8 +401,7 @@ public class CommunicationHandler {
 			is.close();
 			os.close();
 
-			mFileManager.savePicture(FileManager.RECEIVED_FOLDER_PATH, sender,
-					picturePath);
+			mFileManager.savePicture(FileManager.RECEIVED_FOLDER_PATH, sender, picturePath);
 
 		} catch (Exception e) {
 			e.printStackTrace();
