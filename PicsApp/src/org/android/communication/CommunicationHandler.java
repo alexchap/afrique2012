@@ -2,10 +2,7 @@ package org.android.communication;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URL;
@@ -34,7 +31,7 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
-import android.os.Environment;
+
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -292,18 +289,17 @@ public class CommunicationHandler {
 
 		return null;
 	}
-
 	
 	/**
 	 * Cette méhode télécharge une image depuis le serveur
 	 * Méthode utilisée : Connexion à une URL et téléchargement direct
 	 * @param phoneId
-	 * @return
+	 * @return le nom de l'expéditeur
 	 */
-	// TODO: possible de simplifier cette méthode ?
 	public String getImage(String phoneId) {
 		
 		String sender = null;
+		String filename = null;
 
 		// 1. Préparation de l'URL pour demander l'image "suivante" au serveur
 		String url = Utils.SERVER_URL + SEND_IMAGE;
@@ -322,42 +318,26 @@ public class CommunicationHandler {
 			URL urle = new URL(url);
 			URLConnection conn = urle.openConnection();
 			
-			// 3. On parse le header pour obtenir des informations
-			
+			// 3. On parse le header pour obtenir des informations sur l'expéditeur et le nom du fichier
 			String contentDisposition = conn.getHeaderField("Content-disposition");
 
-			// expéditeur et le nom du fichier
+			// expéditeur
 			String senderSep = "sender=";
 			sender = contentDisposition.substring(contentDisposition.indexOf(senderSep) + senderSep.length());
-			Log.d("sender", sender);
 
+			// nom du fichier
 			String filenameSep = "filename=";
 			String end = ", ";
-			contentDisposition = contentDisposition.substring(
+			filename = contentDisposition.substring(
 					contentDisposition.indexOf(filenameSep) + filenameSep.length(), contentDisposition.indexOf(end));
 
-			// 4. On télécharge le fichier
-			File sdcard = Environment.getExternalStorageDirectory();
-			File pictureDir = new File(sdcard, "PicsApp");
-			pictureDir.mkdirs();
+			// 4. On télécharge le fichier sur la carte SD grâce à la connexion
+			String picturePath = mFileManager.savePicturetoSD(conn, filename);
 
-			InputStream is = conn.getInputStream();
-
-			String picturePath = pictureDir.getAbsolutePath() + "/" + contentDisposition;
-			OutputStream os = new FileOutputStream(picturePath);
-
-			byte[] b = new byte[2048];
-			int length;
-
-			while ((length = is.read(b)) != -1) {
-				os.write(b, 0, length);
+			// 5. On sauve la référence dans le bon album
+			if(picturePath != null) {
+				mFileManager.savePicture(FileManager.RECEIVED_FOLDER_PATH, sender, picturePath);
 			}
-
-			is.close();
-			os.close();
-			
-			// 5. On le met au bon endroit grâce à notre gestionnaire de fichiers
-			mFileManager.savePicture(FileManager.RECEIVED_FOLDER_PATH, sender, picturePath);
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -1,9 +1,6 @@
 LIST
 
-- 1 protocol for communication -> to be simplified
-- Simplify function getImage() ?
 - avoid crash if server not available
-- Simplify gallery code ?
 
 Elodie
 

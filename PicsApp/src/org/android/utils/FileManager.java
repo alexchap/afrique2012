@@ -6,10 +6,15 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
+import android.os.Environment;
 import android.util.Log;
 
 /**
@@ -80,6 +85,43 @@ public class FileManager {
 			Log.d("FileManager", "Io Exception while writing");
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Cette méthode télécharge une image grâce à la connexion conn
+	 * et la sauve sur la carte SD
+	 * @param conn
+	 * @param filename
+	 * @return le chemin complet vers l'image
+	 */
+	public String savePicturetoSD(URLConnection conn, String filename){
+		
+		File sdcard = Environment.getExternalStorageDirectory();
+		File pictureDir = new File(sdcard, "PicsApp");
+		
+		String picturePath = pictureDir.getAbsolutePath() + "/" + filename;
+		
+		pictureDir.mkdirs();
+		try {
+			
+			InputStream is = conn.getInputStream();
+			OutputStream os = new FileOutputStream(picturePath);
+	
+			byte[] b = new byte[2048];
+			int length;
+	
+			while ((length = is.read(b)) != -1) {
+				os.write(b, 0, length);
+			}
+	
+			is.close();
+			os.close();	
+		} catch (IOException e) {
+			return null;
+		} finally {
+			
+		}
+		return picturePath;
 	}
 
 	/**
