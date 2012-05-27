@@ -14,6 +14,7 @@ import android.view.View;
  * 
  * @author Elodie
  * @author Oriane
+ * @author Alex
  * 
  */
 public class ViewFoldersActivity extends Activity {
@@ -46,9 +47,9 @@ public class ViewFoldersActivity extends Activity {
 	}
 
 	/**
-	 * 
-	 * @param folderName
-	 *            Le dossier à afficher.
+	 * Cette méthode appelle l'activité qui va montrer la liste des albums pour
+	 * un dossier (reçu / envoyé)
+	 * @param folderName Le dossier à afficher.
 	 */
 	private void retrieveAndDisplay(String folderName, String sender) {
 		Intent viewFolderIntent = new Intent(ViewFoldersActivity.this,

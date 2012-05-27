@@ -17,6 +17,10 @@ import android.os.SystemClock;
 /**
  * Cette classe permet de recevoir de gérer le processus qui reçoit les images
  * depuis le serveur.
+ * 
+ * @author Elodie
+ * @author Oriane
+ * @author Alex
  *
  */
 public class PictureReceiver {
@@ -48,7 +52,7 @@ public class PictureReceiver {
 	/**
 	 * Boucle sur toutes les images reçus et utilise le communicationHandler
 	 * pour télécharger chaque image
-	 * @ return : la liste des utilisateurs qui ont envoyé une image
+	 * @return : la liste des utilisateurs qui ont envoyé une image
 	 */
 	public String[] getImages() {
 		int size = mPaths.size();
@@ -73,7 +77,6 @@ public class PictureReceiver {
 	/**
 	 * Cette méthode affiche une notification à l'utilisateur, pour lui indiquer qu'une nouvelle
 	 * image a été reçue !
-	 * TODO: dire qui a envoyé une image
 	 * @param context le contexte de l'activité pour laquelle il faut afficher une notification
 	 * @param sender l'utlisateur qui a envoyé l'image
 	 */

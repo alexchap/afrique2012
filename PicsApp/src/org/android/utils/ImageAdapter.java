@@ -24,6 +24,8 @@ import android.widget.ImageView;
  * Classe représentant une image dans la Galerie.
  * 
  * @author Elodie
+ * @author Oriane
+ * @author Alex
  * 
  */
 public class ImageAdapter extends BaseAdapter {
@@ -45,10 +47,8 @@ public class ImageAdapter extends BaseAdapter {
 	/**
 	 * Constructeur.
 	 * 
-	 * @param c
-	 *            Le contexte de l'activité appelante.
-	 * @param album
-	 *            L'album a représenter dans la galerie.
+	 * @param c Le contexte de l'activité appelante.
+	 * @param album  L'album a représenter dans la galerie.
 	 */
 	public ImageAdapter(Context c, ArrayList<String> pictures) {
 		mContext = c;
@@ -126,8 +126,7 @@ public class ImageAdapter extends BaseAdapter {
 	 * Redimensionne l'image pour diminuer la taille utilisée en mémoire par
 	 * l'application.
 	 * 
-	 * @param f
-	 *            Le fichier dont on veut tirer une image.
+	 * @param f  Le fichier dont on veut tirer une image.
 	 * @return L'image représentée par le fichier passé en argument.
 	 */
 	public static Bitmap decodeFile(File f) {

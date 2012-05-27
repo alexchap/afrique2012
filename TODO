@@ -1,8 +1,10 @@
 LIST
 
-- CLEANUP + comment code
 - 1 protocol for communication -> to be simplified
-- 
+- Simplify function getImage() ?
+- avoid crash if server not available
+- Simplify gallery code ?
+
 Elodie
 
 - notification : click, then download
@@ -12,7 +14,7 @@ Oriane
 - galerie : share button -> redirection to sendpictureactivity
 
 Alex N
-- CLEANUP serveur
+- CLEANUP and comment code serveur
 
 Alex C
 

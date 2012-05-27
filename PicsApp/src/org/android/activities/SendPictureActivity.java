@@ -28,6 +28,7 @@ import android.widget.Toast;
  * 
  * @author Elodie
  * @author Oriane
+ * @author Alex
  * 
  */
 public class SendPictureActivity extends Activity {
@@ -42,10 +43,10 @@ public class SendPictureActivity extends Activity {
 
 	/** Le chemin d'accès de l'image sélectionnée */
 	private String mSelectedImagePath;
-	
+
 	/** La liste déroulante pour afficher sélectionner un utilisateur */
 	private Spinner spinner;
-	
+
 	/** Champ de texte éditable pour le commentaire */
 	private EditText mEditComment;
 
@@ -63,7 +64,7 @@ public class SendPictureActivity extends Activity {
 
 		mCommHandler = CommunicationHandler.getInstance();
 		mSelectedImagePath = (String) this.getIntent().getExtras()
-				.get("SelectedImage");
+		.get("SelectedImage");
 
 		if (mSelectedImagePath != null) {
 			editPictureBeforeSending();
@@ -87,7 +88,7 @@ public class SendPictureActivity extends Activity {
 		}
 
 		final CommunicationHandler communicationHandler = CommunicationHandler
-				.getInstance();
+		.getInstance();
 
 		ArrayList<String> users = communicationHandler.getUsers(Utils
 				.getPhoneId(this));
@@ -102,24 +103,30 @@ public class SendPictureActivity extends Activity {
 	}
 
 	/**
-	 * Envoie l'image au serveur
+	 * Envoie l'image au serveur. Méthode appelée après un clic sur le bouton
+	 * envoyer
 	 */
 	public void sendPicture(View v) {
 		mProgressDialog = ProgressDialog.show(this,
 				getResources().getString(R.string.patienter), getResources()
-						.getString(R.string.envoi_en_cours), true);
+				.getString(R.string.envoi_en_cours), true);
 
+		// mise à jour du commentaire
 		Utils.setComment(mSelectedImagePath, mEditComment.getText().toString());
 
 		// Récupère le destinataire choisit dans le Spinner
 		final String dest = (String) spinner.getSelectedItem();
 
-		// 1. send to the server
+		/*
+		 * Une thread est lancée pour envoyer l'image. Si cette opération
+		 * réussi, alors on peut sauver la référence de cette image dans le
+		 * dossier "sent"
+		 */
 		new Thread((new Runnable() {
 			public void run() {
 				Message msg = null;
 
-				if (mCommHandler.send(mPhoneId, dest, mSelectedImagePath)) {
+				if (mCommHandler.sendImage(mPhoneId, dest, mSelectedImagePath)) {
 					// Sauvegarde l'image sur le téléphone
 					mFileManager.savePicture(FileManager.SENT_FOLDER_PATH,
 							dest, mSelectedImagePath);
@@ -135,7 +142,11 @@ public class SendPictureActivity extends Activity {
 		})).start();
 
 	}
-
+	/*
+	 * Une fois que l'envoi est terminé, on utilise un Handler
+	 * pour traiter la réponse. Si c'est un succès, on revient à l'activité
+	 * principale. sinon, on affiche une erreur.
+	 */
 	final Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -159,7 +170,7 @@ public class SendPictureActivity extends Activity {
 							getResources().getString(R.string.envoi_failed),
 							Toast.LENGTH_SHORT).show();
 				}
-			default: // should never happen
+			default: 
 				break;
 			}
 		}

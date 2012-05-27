@@ -7,14 +7,19 @@ import org.android.communication.PictureReceiver;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.media.ExifInterface;
-import android.net.Uri;
-import android.os.Environment;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
-
+/**
+ * Cette class rassemble plusieurs informations/méthodes utiles
+ * à l'intégralité du projet PicsApp
+ * 
+ * @author Elodie
+ * @author Oriane
+ * @author Alex
+ *
+ */
 public class Utils {
 
 	/** URL du serveur à contacter */
@@ -32,7 +37,7 @@ public class Utils {
 	/**
 	 *  Récupère l'identificateur du téléphone
 	 * @param mContext
-	 * @return
+	 * @return l'ID du téléphone
 	 */
 	public static String getPhoneId(Context mContext) {
 		TelephonyManager tManager = (TelephonyManager) mContext
@@ -43,6 +48,7 @@ public class Utils {
 	/**
 	 * Cette méthode écrit un commentaire dans une image en ajoutant un tag
 	 * EXIF.
+	 * Limitations : image JPEG et sans tag UserComment prédéfini
 	 */
 	public static boolean setComment(String imagePath, String comment) {
 
@@ -75,17 +81,10 @@ public class Utils {
 		return comment;
 	}
 
-	public static void refreshSDcard(Context c){
-		c.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
-				Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
-
-	}
-
 	/**
 	 * Crée un dialogue ayant un titre et un bouton pour valider l'input
 	 * 
-	 * @param dialogTitle
-	 *            le titre à assigner au dialogue
+	 * @param dialogTitle  le titre à assigner au dialogue
 	 * @param context le contexte (activité)
 	 * @return le dialogue créé
 	 */
@@ -108,8 +107,8 @@ public class Utils {
 	/**
 	 * Méthode principale pour vérifier si de nouvelles images sont disponibles
 	 * Si oui, elle sont téléchargées et une notification est affichée
-	 * @param c
-	 * @param mPhoneId
+	 * @param c le contexte
+	 * @param mPhoneId l'ID du téléphone
 	 */
 	public static void checkAndDownloadPicts(final Context c, final String mPhoneId){
 		new Thread((new Runnable() {

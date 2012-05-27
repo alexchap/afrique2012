@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
@@ -45,6 +44,8 @@ import com.google.gson.reflect.TypeToken;
  * Classe qui s'occupe de la communication avec le serveur.
  * 
  * @author Elodie
+ * @author Oriane
+ * @author Alex
  * 
  */
 public class CommunicationHandler {
@@ -83,8 +84,6 @@ public class CommunicationHandler {
 
 	private static final int VALID_OLD_USER = 1010;
 	private static final int VALID_NEW_USER = 200;
-	// private static final int INVALID_USER = 1030;
-	// private static final int NOT_REGISTERED = 1040;
 
 	private FileManager mFileManager;
 
@@ -100,9 +99,19 @@ public class CommunicationHandler {
 	public static CommunicationHandler getInstance() {
 		return communicationHandler;
 	}
-
+	
+	
+	/***********************************
+	 *  Méthodes liées aux UTILISATEUR *
+	 *  - getUsers()                   *
+	 *  - registerUser()               *
+	 *  - isUser()                     *
+	 ***********************************/
+	
+	
 	/**
 	 * Retourne la liste des noms d'utilisateurs de l'application
+	 * Méthode utilisée : GET de la classe HttpClient
 	 * 
 	 * @param owner
 	 *            l'utilisateur courant de l'application
@@ -115,6 +124,7 @@ public class CommunicationHandler {
 		try {
 			HttpClient client = new DefaultHttpClient();
 
+			// 1. On prépare l'URL cible
 			String url = Utils.SERVER_URL + USERS_SERVLET;
 			if (!url.endsWith("?"))
 				url += "?";
@@ -125,9 +135,10 @@ public class CommunicationHandler {
 			url += paramString;
 			HttpGet request = new HttpGet(url);
 
-			// Execute la requête
+			// 2. On exécute la requête
 			HttpResponse response = client.execute(request);
-
+			
+			// 3. On récupère la liste depuis la réponse
 			users = getListFromResponse(response);
 
 		} catch (ClientProtocolException e) {
@@ -146,22 +157,84 @@ public class CommunicationHandler {
 
 		return users;
 	}
+	
+	/**
+	 * Envoie le login vers le serveur
+	 * Méthode utilisée : POST de la classe HttpClient
+	 * 
+	 * @param userToSend L'utilisateur à envoyer vers le serveur.
+	 * @return le status de l'envoi vers le serveur
+	 */
+	public boolean registerUser(String username, String phoneId) {
+		HttpPost httpPost = new HttpPost(Utils.SERVER_URL + USER_SERVLET);
+		
+		// 1. On ajoute les paramètres à une list clés-valeur
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		// Nom d'utilisateur
+		params.add(new BasicNameValuePair(USERNAME_TAG, username));
+		// id du téléphone
+		params.add(new BasicNameValuePair(PHONEID_TAG, phoneId));
+
+		// 2. On exécute la requête avec ces paramètres
+		int result = executePostWithParams(httpPost, params).getStatusLine().getStatusCode();
+
+		if (result == VALID_NEW_USER) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	/**
-	 * Envoi d'une photo
+	 * Envoi le login vers le serveur.
+	 * Méthode utilisée : POST de la classe HttpClient
 	 * 
-	 * @param toSend
-	 *            la photo à envoyer
-	 * @return le status d'envoi de la photo; true si envoyée avec succès, false
+	 * @param userToSend L'utilisateur à envoyer vers le serveur.
+	 * @return le status de l'envoi vers le serveur
+	 */
+	public boolean isUser(String phoneId) {
+		HttpPost httpPost = new HttpPost(Utils.SERVER_URL + IS_USER_SERVLET);
+		
+		// 1. On définit les paramètres
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+
+		// id du téléphone
+		params.add(new BasicNameValuePair(PHONEID_TAG, phoneId));
+
+		// 2. On exécute la requête avec ces paramètres
+		int result = executePostWithParams(httpPost, params).getStatusLine().getStatusCode();
+
+		Log.d("Response", "" + result);
+		if (result == VALID_OLD_USER) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/******************************
+	 * Méthodes liées aux IMAGES  *
+	 * - sendImage()              *
+	 * - getImage()               *
+	 * - checkReceivedPicture()   *
+	 ******************************/
+	
+	/**
+	 * Envoi d'une photo
+	 * Méthode utilisée : Multipart Post de la class HttpClient
+	 * 
+	 * @param toSend la photo à envoyer
+	 * @return le statut d'envoi de la photo; true si envoyée avec succès, false
 	 *         si un problème est survenu
 	 */
-	public boolean send(String phoneID, String dest, String toSend) {
+	public boolean sendImage(String phoneID, String dest, String toSend) {
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpContext localContext = new BasicHttpContext();
+		// 1. On prépare la requête POST et l'entité multipart
 		HttpPost httpPost = new HttpPost(Utils.SERVER_URL + RECEIVE_IMAGE_SERVLET);
-
 		MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 
+		// 2. On ajoute les champs : id expéditeur, destinataire puis l'image
 		try {
 			// Ajoute l'id de l'expéditeur comme première partie de l'entité
 			entity.addPart(PHONEID_TAG, new StringBody(phoneID));
@@ -176,6 +249,7 @@ public class CommunicationHandler {
 		File toSendFile = new File(toSend);
 		entity.addPart(toSendFile.getName(), new FileBody(toSendFile));
 
+		// 3. On définit l'entité et on exécute le POST
 		httpPost.setEntity(entity);
 		try {
 			httpClient.execute(httpPost, localContext);
@@ -189,175 +263,49 @@ public class CommunicationHandler {
 		return true;
 	}
 
+	
 	/**
-	 * Envoie le login vers le serveur.
-	 * 
-	 * @param userToSend
-	 *            L'utilisateur à envoyer vers le serveur.
-	 * @return le status de l'envoi vers le serveur
+	 * Cette méthode vérifie si de nouvelles images doivent être téléchargées
+	 * depuis le serveur
+	 * Méthode utilisée : POST de la classe HttpClient
+	 * @param phoneId
+	 * @return
 	 */
-	public boolean registerUser(String username, String phoneId) {
-		HttpPost httpPost = new HttpPost(Utils.SERVER_URL + USER_SERVLET);
-
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		// Nom d'utilisateur
-		params.add(new BasicNameValuePair(USERNAME_TAG, username));
-
-		// id du téléphone
-		params.add(new BasicNameValuePair(PHONEID_TAG, phoneId));
-
-		UrlEncodedFormEntity entity;
-
-		try {
-			entity = new UrlEncodedFormEntity(params);
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-			return false;
-		}
-
-		httpPost.setEntity(entity);
-
-		HttpResponse httpResponse = executePost(httpPost);
-		int result = httpResponse.getStatusLine().getStatusCode();
-
-		if (result == VALID_NEW_USER) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * Envoi le login vers le serveur.
-	 * 
-	 * @param userToSend
-	 *            L'utilisateur à envoyer vers le serveur.
-	 * @return le status de l'envoi vers le serveur
-	 */
-	public boolean isUser(String phoneId) {
-		HttpPost httpPost = new HttpPost(Utils.SERVER_URL + IS_USER_SERVLET);
-
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-
-		// id du téléphone
-		params.add(new BasicNameValuePair(PHONEID_TAG, phoneId));
-
-		int result = executePostWithParams(httpPost, params);
-
-		Log.d("Response", "" + result);
-		if (result == VALID_OLD_USER) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public int executePostWithParams(HttpPost httpPost, List<NameValuePair> params) {
-		UrlEncodedFormEntity entity;
-
-		try {
-			entity = new UrlEncodedFormEntity(params);
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-			return -1;
-		}
-
-		httpPost.setEntity(entity);
-
-		HttpResponse httpResponse = executePost(httpPost);
-		if (httpResponse == null) {
-			return -1;
-		}
-		return httpResponse.getStatusLine().getStatusCode();
-	}
-
-	public HttpResponse executePost(HttpPost httpPost) {
-		HttpClient httpClient = new DefaultHttpClient();
-
-		try {
-			HttpResponse response = httpClient.execute(httpPost);
-
-			return response;
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
 	public ArrayList<String> checkReceivedPicture(String phoneId) {
 		HttpPost httpPost = new HttpPost(Utils.SERVER_URL + CHECK_NEW_PICTURES_SERVLET);
-
+		// 1. On prépare les paramètres
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 
 		// id du téléphone
 		params.add(new BasicNameValuePair(PHONEID_TAG, phoneId));
 
-		UrlEncodedFormEntity entity = null;
+		// 2. On exécute la requête
+		HttpResponse response = executePostWithParams(httpPost, params);
 
-		try {
-			entity = new UrlEncodedFormEntity(params);
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		}
-
-		httpPost.setEntity(entity);
-
-		HttpResponse response = executePost(httpPost);
-
+		// 3. On parse le résultat et on retourne la liste si statut OK
 		ArrayList<String> paths = getListFromResponse(response);
 		int result = response.getStatusLine().getStatusCode();
 
-		if (result > 1000) {
+		if (result > 1000) { // TODO: constant above ?
 			return paths;
 		}
 
 		return null;
 	}
 
+	
 	/**
-	 * Gets a list from an HttpResponse
-	 * 
-	 * @param response
-	 *            the response to get the list from
-	 * @return the list
+	 * Cette méhode télécharge une image depuis le serveur
+	 * Méthode utilisée : Connexion à une URL et téléchargement direct
+	 * @param phoneId
+	 * @return
 	 */
-	public ArrayList<String> getListFromResponse(HttpResponse response) {
-		BufferedReader in = null;
-		ArrayList<String> list = null;
-		try {
-
-			// Récupère les informations renvoyées par le serveur
-			String page = EntityUtils.toString(response.getEntity());
-
-			// Désérialise la liste reçue depuis le serveur
-			Gson gson = new Gson();
-			Type type = new TypeToken<ArrayList<String>>() {
-			}.getType();
-			list = gson.fromJson(page, type);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		return list;
-
-	}
-
+	// TODO: possible de simplifier cette méthode ?
 	public String getImage(String phoneId) {
 		
 		String sender = null;
-		
-		// BufferedReader in = null;
-		String responseString = "";
 
+		// 1. Préparation de l'URL pour demander l'image "suivante" au serveur
 		String url = Utils.SERVER_URL + SEND_IMAGE;
 		if (!url.endsWith("?"))
 			url += "?";
@@ -369,13 +317,16 @@ public class CommunicationHandler {
 		url += paramString;
 
 		try {
-
+			
+			// 2. On ouvre la connexion
 			URL urle = new URL(url);
 			URLConnection conn = urle.openConnection();
-
+			
+			// 3. On parse le header pour obtenir des informations
+			
 			String contentDisposition = conn.getHeaderField("Content-disposition");
 
-			// Récupère l'expéditeur
+			// expéditeur et le nom du fichier
 			String senderSep = "sender=";
 			sender = contentDisposition.substring(contentDisposition.indexOf(senderSep) + senderSep.length());
 			Log.d("sender", sender);
@@ -385,6 +336,7 @@ public class CommunicationHandler {
 			contentDisposition = contentDisposition.substring(
 					contentDisposition.indexOf(filenameSep) + filenameSep.length(), contentDisposition.indexOf(end));
 
+			// 4. On télécharge le fichier
 			File sdcard = Environment.getExternalStorageDirectory();
 			File pictureDir = new File(sdcard, "PicsApp");
 			pictureDir.mkdirs();
@@ -403,7 +355,8 @@ public class CommunicationHandler {
 
 			is.close();
 			os.close();
-
+			
+			// 5. On le met au bon endroit grâce à notre gestionnaire de fichiers
 			mFileManager.savePicture(FileManager.RECEIVED_FOLDER_PATH, sender, picturePath);
 
 		} catch (Exception e) {
@@ -413,4 +366,95 @@ public class CommunicationHandler {
 
 		return sender;
 	}
+
+	/*********************************************
+	 *  Méthodes pour exécuter des requêtes POST *
+	 *********************************************/
+	
+	/**
+	 * Cette méthode importante prépare une requête POST avec des paramètres
+	 * données, exécute la requête et retourne le statut de la réponse.
+	 * @param httpPost la requête POST
+	 * @param params une liste de clés-valeur
+	 * @return la réponse
+	 */
+	public HttpResponse executePostWithParams(HttpPost httpPost, List<NameValuePair> params) {
+		UrlEncodedFormEntity entity;
+
+		// 1. On prépare l'entité avec une URL contenant les paramètres
+		try {
+			entity = new UrlEncodedFormEntity(params);
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+			return null;
+		}
+		// 2. On assigne cette entité à la requête
+		httpPost.setEntity(entity);
+
+		// 3. On exécute la requête et retourne la réponse
+		HttpResponse httpResponse = executePost(httpPost);
+		return httpResponse;
+	}
+	
+	/**
+	 * Cette méthode exécute la requête POST avec un client
+	 * Http par défaut
+	 * @param httpPost la requête à exécuter
+	 * @return la réponse ou null si échec
+	 */
+	public HttpResponse executePost(HttpPost httpPost) {
+		HttpClient httpClient = new DefaultHttpClient();
+
+		try {
+			HttpResponse response = httpClient.execute(httpPost);
+
+			return response;
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/*********************************************
+	 *  Méthodes pour lire des réponses Http     *
+	 *********************************************/
+
+	/**
+	 * Cette méthode retourne une liste de chaines de caractères
+	 * depuis une réponse du serveur. Elle parse l'entité de la
+	 * réponse HTTP.
+	 * 
+	 * @param response la réponse HTTP à parser
+	 * @return une liste de strings
+	 */
+	public ArrayList<String> getListFromResponse(HttpResponse response) {
+		BufferedReader in = null;
+		ArrayList<String> list = null;
+		try {
+
+			// 1. Récupère les informations renvoyées par le serveur
+			String page = EntityUtils.toString(response.getEntity());
+
+			// 2. Désérialise la liste reçue depuis le serveur
+			Gson gson = new Gson();
+			Type type = new TypeToken<ArrayList<String>>() {
+			}.getType();
+			list = gson.fromJson(page, type);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return list;
+
+	}
+	
 }

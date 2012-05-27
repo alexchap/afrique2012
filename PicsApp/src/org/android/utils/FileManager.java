@@ -19,6 +19,7 @@ import android.util.Log;
  * 
  * @author Elodie
  * @author Oriane
+ * @author Alex
  * 
  */
 public class FileManager {
@@ -45,12 +46,9 @@ public class FileManager {
 	/**
 	 * * Enregistre une image dans le dossier passé en paramètre.
 	 * 
-	 * @param folderName
-	 *            Le dossier dans lequel enregistrer l'image
-	 * @param user
-	 *            L'utilisateur a qui on envoie l'image
-	 * @param path
-	 *            Le chemin d'accès de l'image
+	 * @param folderName Le dossier dans lequel enregistrer l'image
+	 * @param user L'utilisateur a qui on envoie l'image
+	 * @param path Le chemin d'accès de l'image
 	 */
 	public void savePicture(String folderName, String user, String path) {
 		// Vérifie si le chemin correspond à l'un de nos dossiers.
@@ -144,8 +142,7 @@ public class FileManager {
 	/**
 	 * Récupère l'album avec le nom spécifié.
 	 * 
-	 * @param albumName
-	 *            Le nom de l'album à récupérer.
+	 * @param albumName Le nom de l'album à récupérer.
 	 * @return L'album.
 	 */
 	public ArrayList<String> retrievePictures(String userName, String folderName) {
@@ -166,23 +163,20 @@ public class FileManager {
 			try {
 				fis = new FileInputStream(toRetrieve);
 
-				// Here BufferedInputStream is added for fast reading.
+				//  BufferedInputStream utilisé pour une lecture rapide
 				bis = new BufferedInputStream(fis);
 				dis = new DataInputStream(bis);
 
-				// dis.available() returns 0 if the file does not have more
-				// lines.
+				// dis.available() retourne 0 s'il n'y a plus de lignes à lire dans le fichier
 				while (dis.available() != 0) {
 
-					// this statement reads the line from the file and print it
-					// to the console.
 					String picturePath = dis.readLine();
 					if (!picturePath.equals("")) {
 						pictures.add(picturePath);
 					}
 				}
 
-				// dispose all the resources after using them.
+				// on libère les ressources
 				fis.close();
 				bis.close();
 				dis.close();
@@ -201,8 +195,7 @@ public class FileManager {
 	/**
 	 * Vérifie si un album du même nom existe déjà
 	 * 
-	 * @param name
-	 *            Le nom de l'utilisateur dont on veut vérifier l'existance
+	 * @param name Le nom de l'utilisateur dont on veut vérifier l'existance
 	 * @return true si un dossier d'utilisateur du même nom de trouve dans le
 	 *         dossier saved, false sinon.
 	 */
@@ -230,8 +223,7 @@ public class FileManager {
 	 * Vérifie si le chemin passé en paramètre correspond bien à un des dossiers
 	 * de l'application.
 	 * 
-	 * @param folderName
-	 *            Le chemin à vérifier.
+	 * @param folderName Le chemin à vérifier.
 	 */
 	public void verifyPath(String folderName) {
 		if (!(folderName.equals(SENT_FOLDER_PATH) || folderName
