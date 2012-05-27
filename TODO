@@ -6,11 +6,9 @@ LIST
 Elodie
 
 - notification : click, then download
-- icon for the app DONE
 
 Oriane
 
-- receive : put some color for update galeries ! + go directly to last pict
 - galerie : share button -> redirection to sendpictureactivity
 
 Alex N
@@ -18,5 +16,3 @@ Alex N
 
 Alex C
 
-- REAL delete of pictures (not only txt files)
-- edit before sending -> jump to home

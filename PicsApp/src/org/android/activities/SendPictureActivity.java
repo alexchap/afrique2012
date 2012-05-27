@@ -9,6 +9,7 @@ import org.android.utils.Utils;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -145,6 +146,9 @@ public class SendPictureActivity extends Activity {
 					Toast.makeText(getApplicationContext(),
 							getResources().getString(R.string.envoi_reussi),
 							Toast.LENGTH_SHORT).show();
+					// on revient à l'application de base
+					Intent sendPictureIntent = new Intent(SendPictureActivity.this,	PicsAppActivity.class);
+					startActivity(sendPictureIntent);
 				}
 				break;
 			case MSG_ERR:

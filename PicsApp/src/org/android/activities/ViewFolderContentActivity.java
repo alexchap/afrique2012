@@ -11,7 +11,6 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -101,9 +100,6 @@ public class ViewFolderContentActivity extends ListActivity {
 	 * Listener sur chaque ligne de la liste d'albums. Pour l'instant permet
 	 * d'éditer l'album comme s'il était nouveau, quel que soit le dossier dans
 	 * lequel on se trouve.
-	 * 
-	 * TODO: seulement éditer si on était dans drafts, sinon afficher l'album
-	 * normalement.
 	 * 
 	 */
 	OnItemClickListener onItemClickListener = new OnItemClickListener() {

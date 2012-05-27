@@ -101,7 +101,16 @@ public class FileManager {
 		File toDelete = new File(directory.getPath(), name);
 		if (!toDelete.exists()) {
 			return true;
+		} else {
+			// supprime toutes les images du disque pour ce dossier
+			ArrayList<String> picts = retrievePictures(name,folderName);
+			for(int i=0;i<picts.size();i++){
+				File img = new File(picts.get(i));
+				boolean ok = img.delete();
+				Log.d("delete","image "+ picts.get(i) + " -> " + ok);
+			}
 		}
+		// finalement on supprime le fichier de référence pour l'utilisateur
 		return toDelete.delete();
 	}
 

@@ -5,7 +5,6 @@ import java.util.Calendar;
 
 import org.android.R;
 import org.android.communication.CommunicationHandler;
-import org.android.communication.PictureReceiver;
 import org.android.utils.Utils;
 
 import android.app.Activity;

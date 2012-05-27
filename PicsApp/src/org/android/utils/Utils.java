@@ -3,7 +3,6 @@ package org.android.utils;
 import java.io.IOException;
 
 import org.android.R;
-import org.android.activities.PicsAppActivity;
 import org.android.communication.PictureReceiver;
 
 import android.app.AlertDialog;
@@ -18,7 +17,7 @@ import android.view.View;
 
 public class Utils {
 
-	// URL du serveur à contacter
+	/** URL du serveur à contacter */
 	public static final String SERVER_URL = "http://128.178.75.23:8080/PicsAppServer_v1.1/";
 
 	/** Code pour appeler la galerie */
@@ -30,7 +29,11 @@ public class Utils {
 	/** Exif tag pour le commentaire d'une image */
 	final static String EXIF_TAG = "UserComment";
 
-	// Récupère l'identificateur du téléphone
+	/**
+	 *  Récupère l'identificateur du téléphone
+	 * @param mContext
+	 * @return
+	 */
 	public static String getPhoneId(Context mContext) {
 		TelephonyManager tManager = (TelephonyManager) mContext
 		.getSystemService(Context.TELEPHONY_SERVICE);
@@ -102,6 +105,12 @@ public class Utils {
 		return inputDialog;
 	}
 
+	/**
+	 * Méthode principale pour vérifier si de nouvelles images sont disponibles
+	 * Si oui, elle sont téléchargées et une notification est affichée
+	 * @param c
+	 * @param mPhoneId
+	 */
 	public static void checkAndDownloadPicts(final Context c, final String mPhoneId){
 		new Thread((new Runnable() {
 			public void run() {
