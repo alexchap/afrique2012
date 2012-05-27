@@ -4,13 +4,18 @@ import java.util.ArrayList;
 
 import org.android.R;
 import org.android.utils.FileManager;
+import org.android.utils.Utils;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -39,6 +44,9 @@ public class ViewFolderContentActivity extends ListActivity {
 	/** Representing the current folder */
 	private String mCurrentFolder;
 
+	/** l'utilisateur qui a envoyé une nouvelle image pour la surbrillance */
+	private String mSender;
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -63,13 +71,24 @@ public class ViewFolderContentActivity extends ListActivity {
 		handleExtras();
 
 		if (!mUsers.isEmpty()) {
-			ArrayAdapter arrayAdapter = new ArrayAdapter(this,
-					R.layout.view_folder_activity_list_item, mUsers);
-			setListAdapter(arrayAdapter);
+			// Si nouvelle photo -> on va directement dans la galerie
+			if(mSender != null){
+				viewImageForUser(mSender);
 
-			mListView = getListView();
-			mListView.setOnItemClickListener(onItemClickListener);
-			mListView.setOnItemLongClickListener(onItemLongClickListener);
+			} else { // sinon on affiche la liste des utilisateurs
+				ArrayAdapter arrayAdapter = new ArrayAdapter(this,
+						R.layout.view_folder_activity_list_item, mUsers);
+
+				setListAdapter(arrayAdapter);
+
+				mListView = getListView();
+				mListView.setTextFilterEnabled(true);
+				mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+				mListView.setOnItemClickListener(onItemClickListener);
+				mListView.setOnItemLongClickListener(onItemLongClickListener);
+			}
+
+
 		} else {
 			Toast.makeText(getApplicationContext(),
 					getResources().getString(R.string.aucune_photo),
@@ -94,15 +113,9 @@ public class ViewFolderContentActivity extends ListActivity {
 		 */
 		public void onItemClick(AdapterView<?> adapter, View view,
 				int position, long arg3) {
-			Intent viewImagesIntent;
-
-			viewImagesIntent = new Intent(ViewFolderContentActivity.this,
-					ViewImagesActivity.class);
-			viewImagesIntent.putExtra("CURRENT_FOLDER", mCurrentFolder);
 
 			String userName = (String) adapter.getItemAtPosition(position);
-			viewImagesIntent.putExtra("USER_NAME", userName);
-			startActivity(viewImagesIntent);
+			viewImageForUser(userName);
 
 		}
 	};
@@ -120,17 +133,31 @@ public class ViewFolderContentActivity extends ListActivity {
 		}
 	};
 
+	private void viewImageForUser(String userName){
+		Intent viewImagesIntent;
+
+		viewImagesIntent = new Intent(ViewFolderContentActivity.this,
+				ViewImagesActivity.class);
+		viewImagesIntent.putExtra("CURRENT_FOLDER", mCurrentFolder);
+
+
+		viewImagesIntent.putExtra("USER_NAME", userName);
+		startActivity(viewImagesIntent);
+	}
+
 	/**
 	 * Récupère les données reçues avec l'<code>Intent</code>
 	 * 
 	 * @return Les albums reçus
 	 */
 	private void handleExtras() {
+
 		Bundle extras = getIntent().getExtras();
 		mCurrentFolder = (String) extras
-				.get(ViewFoldersActivity.TO_DISPLAY_FOLDER_CODE);
-
+		.get(ViewFoldersActivity.TO_DISPLAY_FOLDER_CODE);
+		mSender = extras.getString("sender"); 
 		mUsers = mFileManager.retrievePicturesInFolder(mCurrentFolder);
+
 	}
 
 	/**
@@ -148,49 +175,71 @@ public class ViewFolderContentActivity extends ListActivity {
 						+ " "
 						+ (mCurrentFolder.equals(FileManager.SENT_FOLDER_PATH) ? "envoyées à"
 								: "reçues par")
-						+ " "
-						+ getResources().getString(
-								R.string.supprimer_images_confirmation_fin))
-		// Bouton pour supprimer les images
-				.setPositiveButton(
-						mContext.getResources().getString(
-								R.string.supprimer_images_confirmer),
-						new DialogInterface.OnClickListener() {
+								+ " "
+								+ getResources().getString(
+										R.string.supprimer_images_confirmation_fin))
+										// Bouton pour supprimer les images
+										.setPositiveButton(
+												mContext.getResources().getString(
+														R.string.supprimer_images_confirmer),
+														new DialogInterface.OnClickListener() {
 
-							/** Supprime l'album */
-							public void onClick(DialogInterface dialog, int id) {
-								if (mFileManager.deleteAlbum(userName,
-										mCurrentFolder)) {
-									mUsers.remove(userName);
-									setListAdapter(new ArrayAdapter(
-											ViewFolderContentActivity.this,
-											R.layout.view_folder_activity_list_item,
-											mUsers));
+													/** Supprime l'album */
+													public void onClick(DialogInterface dialog, int id) {
+														if (mFileManager.deleteAlbum(userName,
+																mCurrentFolder)) {
+															mUsers.remove(userName);
+															setListAdapter(new ArrayAdapter(
+																	ViewFolderContentActivity.this,
+																	R.layout.view_folder_activity_list_item,
+																	mUsers));
 
-									mListView.invalidate();
-									Toast.makeText(
-											getApplicationContext(),
-											getResources()
-													.getString(
-															R.string.supprimer_images_succes),
-											Toast.LENGTH_SHORT).show();
-								}
-							}
-						})
-				// Bouton pour annuler la suppression de l'album
-				.setNegativeButton(
-						mContext.getResources().getString(R.string.annuler),
-						new DialogInterface.OnClickListener() {
+															mListView.invalidate();
+															Toast.makeText(
+																	getApplicationContext(),
+																	getResources()
+																	.getString(
+																			R.string.supprimer_images_succes),
+																			Toast.LENGTH_SHORT).show();
+														}
+													}
+												})
+												// Bouton pour annuler la suppression de l'album
+												.setNegativeButton(
+														mContext.getResources().getString(R.string.annuler),
+														new DialogInterface.OnClickListener() {
 
-							/** Annule la suppression */
-							public void onClick(DialogInterface dialog, int id) {
-								dialog.dismiss();
-							}
-						});
+															/** Annule la suppression */
+															public void onClick(DialogInterface dialog, int id) {
+																dialog.dismiss();
+															}
+														});
 		// Crée le dialogue
 		AlertDialog deleteAlbumDialog = builder.create();
 		// Affiche le dialogue à l'écran
 		deleteAlbumDialog.show();
 	}
+
+	/** Menus */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.viewfoldercontentmenu , menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.refresh:
+			// On vérifie si des nouvelles photos sont disponibles
+			Utils.checkAndDownloadPicts(ViewFolderContentActivity.this, Utils.getPhoneId(ViewFolderContentActivity.this));
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
+
 
 }

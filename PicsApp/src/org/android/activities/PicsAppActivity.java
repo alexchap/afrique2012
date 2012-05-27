@@ -61,25 +61,8 @@ public class PicsAppActivity extends Activity {
 			Toast.makeText(getApplicationContext(),
 					getResources().getString(R.string.login_success),
 					Toast.LENGTH_SHORT).show();
-
-			new Thread((new Runnable() {
-				public void run() {
-					PictureReceiver pictureReceiver = new PictureReceiver(
-							mPhoneId);
-
-					if (pictureReceiver.checkReceivedPictures()) {
-
-						int numberReceived = pictureReceiver.getSize();
-
-						pictureReceiver.getImages();
-
-						for (int i = 0; i < numberReceived; i++) {
-							pictureReceiver.createNotification(PicsAppActivity.this);
-						}
-					}
-				}
-			})).start();
-
+			Utils.checkAndDownloadPicts(PicsAppActivity.this, mPhoneId);
+			
 		}
 	}
 

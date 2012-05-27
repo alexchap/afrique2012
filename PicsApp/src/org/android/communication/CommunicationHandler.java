@@ -352,6 +352,9 @@ public class CommunicationHandler {
 	}
 
 	public String getImage(String phoneId) {
+		
+		String sender = null;
+		
 		// BufferedReader in = null;
 		String responseString = "";
 
@@ -374,7 +377,7 @@ public class CommunicationHandler {
 
 			// Récupère l'expéditeur
 			String senderSep = "sender=";
-			String sender = contentDisposition.substring(contentDisposition.indexOf(senderSep) + senderSep.length());
+			sender = contentDisposition.substring(contentDisposition.indexOf(senderSep) + senderSep.length());
 			Log.d("sender", sender);
 
 			String filenameSep = "filename=";
@@ -408,6 +411,6 @@ public class CommunicationHandler {
 			return null;
 		}
 
-		return responseString;
+		return sender;
 	}
 }
