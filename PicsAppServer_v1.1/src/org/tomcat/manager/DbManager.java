@@ -11,7 +11,7 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 
 /**
- * Classe permettant de faire toutes les accès à la base de données
+ * Classes permettant de faire toutes les accès à la base de données
  * 
  * @author alex
  * 
@@ -43,14 +43,13 @@ public class DbManager {
 	 * Constructeur
 	 */
 	public DbManager() {
-		// connection = dbConnection();
-		System.out.println("Connection établie avec MySql ");
+
 	}
 
 	/**
-	 * Crée la connexion à la base de donnée
+	 * Etablie la connexion à la base de donnée
 	 * 
-	 * @return Connexion l'object Connection lié à la connexion établie
+	 * @return Connection l'object Connection lié à la connexion établie
 	 */
 	public Connection dbConnection() {
 		Connection connection = null;
@@ -67,6 +66,7 @@ public class DbManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		System.out.println("Connection à la base de données...");
 		return connection;
 	}
 
@@ -75,7 +75,7 @@ public class DbManager {
 	 * 
 	 * @param statement
 	 *            Statement à executer
-	 * @return int Le nombre de ligne mise à jour dans la base de donnée
+	 * @return Le nombre de ligne mise à jour dans la base de données
 	 */
 	public int dbUpdateQuery(PreparedStatement statement) {
 		int numLineDb = 0;
@@ -90,11 +90,12 @@ public class DbManager {
 	}
 
 	/**
-	 * Exécute une requête
+	 * Exécute la requête fournie par le statement
 	 * 
 	 * @param statement
 	 *            à exécuter
-	 * @return les résultats retournés par la base de donnée
+	 * @return ResultSet 
+	 * 		le résultat retourné par la base de donnée
 	 */
 	public ResultSet dbExecuteQuery(PreparedStatement statement) {
 		ResultSet rset = null;
@@ -107,11 +108,10 @@ public class DbManager {
 	}
 
 	/**
-	 * Retourne l'ensemble des informations liées au champs associé à la valeur
-	 * donné
+	 * Exécute une requête avec un critère de recherche
 	 * 
 	 * @param table
-	 *            la table à laquelle on doit accéder
+	 *            la table dans laquelle on doit accéder
 	 * @param field
 	 *            le champ voulu
 	 * @param value
@@ -129,16 +129,18 @@ public class DbManager {
 			result = stmnt.executeQuery();
 		} catch (SQLException e) {
 			e.printStackTrace();
-
 		}
-
 		return result;
 	}
 
 	/**
 	 * Vérifie si un utilisateur est présent dans la base de donnée
 	 * 
-	 * @return Boolean "oui" si l'utilisateur est présent dans la base de donnée
+	 * @param	String
+	 * 			Nom de l'utilisateur recherché
+	 * 
+	 * @return Boolean 
+	 * 			"oui" si l'utilisateur est présent dans la base de donnée
 	 */
 	public boolean isInDbPseudo(String user) {
 		try {
@@ -160,11 +162,12 @@ public class DbManager {
 	 * Ajoute un utilisateur dans la base de données
 	 * 
 	 * @param user
-	 *            l'utilisateur à ajouter
+	 *            Nom de l'utilisateur à ajouter
 	 * @param phoneId
 	 *            l'id du téléphone de l'utilisateur à ajouter
 	 * @return
-	 */
+	 * 			Nombre de ligne mis à jour dans la base de données
+	 */		
 	public int addUser(String user, String phoneId) {
 
 		String req = "insert into user (phoneId,pseudo) values (?,?)";
@@ -217,7 +220,6 @@ public class DbManager {
 			System.out.println(value);
 			ResultSet rs = dbExecuteQuery(stmnt);
 			while (rs.next()) {
-				System.out.println(rs.getString(field) + " " + value);
 				if (rs.getString(field).equals(value)) {
 					return true;
 				}
@@ -298,11 +300,12 @@ public class DbManager {
 
 	/**
 	 * Recherche les informations dans la table album liées à l'utilisateur
-	 * spécifié
+	 * spécifié pour lesquelles le champs status  est 0
 	 * 
 	 * @param pseudo
 	 *            Utilisateur dont on recherche les informations
-	 * @return ResultSet Resultat de la requête
+	 * @return ArrayList<String>
+	 * 				Liste du champs "path" correspondant au critère de recherche
 	 */
 	public ArrayList<String> getNewPictures(String pseudo) {
 		PreparedStatement stmnt = null;
@@ -319,8 +322,6 @@ public class DbManager {
 
 			while (result.next()) {
 				paths.add(result.getString("path"));
-				System.out.println("----------New Pictures----------");
-				System.out.println(result.getString("path"));
 			}
 
 		} catch (SQLException e) {
@@ -357,6 +358,18 @@ public class DbManager {
 
 	}
 
+	/**
+	 * Met à jour le champ "status" d'un enregistrement de la table picture 
+	 * 
+	 * @param sender
+	 * 			Expéditeur
+	 * @param receiver
+	 * 			Destinataire
+	 * @param path
+	 * 			Chemin absolu du fichier
+	 * @return
+	 * 			Nombre de ligne mise à jour
+	 */
 	public int setPictureSent(String sender, String receiver, String path) {
 		String req = "update picture set status=1 where sender=? and receiver=? and path=?";
 		Connection con = dbConnection();
@@ -376,12 +389,20 @@ public class DbManager {
 		return dbUpdateQuery(statement);
 	}
 
+	/**
+	 * Obtenir le nom d'un utilisateur en fonction de l'id de son téléphone
+	 * 
+	 * @param phoneId
+	 * 			id du téléphone
+	 * @return String
+	 * 			Nom de l'utilisateur
+	 */
 	public String getUserPseudo(String phoneId) {
 		ResultSet rs = getDbResultSet(USER_TABLE, USER_PHONEID_FIELD, phoneId);
 		String name = "";
 
 		try {
-			if (rs.next()) // verifie que le ResultSet n'est pas vide
+			if (rs.next())
 				name = rs.getString(USER_NAME_FIELD);
 		} catch (SQLException e) {
 			e.printStackTrace();

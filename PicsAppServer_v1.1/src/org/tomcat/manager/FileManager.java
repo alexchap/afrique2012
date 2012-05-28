@@ -40,19 +40,30 @@ public class FileManager {
 		return new File(folderPath).mkdir();
 	}
 
-	// vérifie si un dossier existe
+	/**
+	 * vérifie si un dossier existe
+	 * 
+	 * @param directory
+	 * 			Nom du dossier 
+	 * @return
+	 * 		"oui" si le dossier existe et "non" sinon
+	 */
 	public boolean exists(String directory) {
 		return new File(DEFAULT_DB_PATH + directory).exists();
 	}
 
 	/**
-	 * Sauvegarde les images
+	 * Sauvegarde l'image dans le disque
 	 * 
-	 * @param items
-	 *            Liste des items (images)
-	 * @param subDirPath
-	 *            Nom du dossier où seront sauvegarder les images
-	 * @return Oui, si la sauvegarde s'est fait avec succès
+	 * @param item
+	 *            L'image
+	 * @param sender
+	 *            Expéditeur
+	 * @param path
+	 * 			  Chemin absolu du fichier
+	 * 
+	 *  @return
+	 *  		 "oui" Si l'enregistrement s'est fait avec succès
 	 */
 	public boolean saveImageToDisk(DiskFileItem item, String sender, String path) {
 		try {
