@@ -5,7 +5,6 @@ import java.util.Calendar;
 
 import org.android.R;
 import org.android.communication.CommunicationHandler;
-import org.android.communication.PictureReceiver;
 import org.android.utils.Utils;
 
 import android.app.Activity;
@@ -27,6 +26,7 @@ import android.widget.Toast;
  * 
  * @author Elodie
  * @author Oriane
+ * @author Alex
  * 
  */
 public class PicsAppActivity extends Activity {
@@ -49,7 +49,9 @@ public class PicsAppActivity extends Activity {
 		initialize();
 	}
 
-	/** Initialise la vue */
+	/** Initialise la vue
+	 * TODO: ne pas crasher l'application si le serveur ne répond pas (e.g. pas de VPN)
+	 */
 	private void initialize() {
 		// File Manager
 		mCommHandler = CommunicationHandler.getInstance();
@@ -61,25 +63,9 @@ public class PicsAppActivity extends Activity {
 			Toast.makeText(getApplicationContext(),
 					getResources().getString(R.string.login_success),
 					Toast.LENGTH_SHORT).show();
-
-			new Thread((new Runnable() {
-				public void run() {
-					PictureReceiver pictureReceiver = new PictureReceiver(
-							mPhoneId);
-
-					if (pictureReceiver.checkReceivedPictures()) {
-
-						int numberReceived = pictureReceiver.getSize();
-
-						pictureReceiver.getImages();
-
-						for (int i = 0; i < numberReceived; i++) {
-							pictureReceiver.createNotification(PicsAppActivity.this);
-						}
-					}
-				}
-			})).start();
-
+			// télécharge les éventuellesn nouvelles images
+			Utils.checkAndDownloadPicts(PicsAppActivity.this, mPhoneId);
+			
 		}
 	}
 
@@ -146,7 +132,6 @@ public class PicsAppActivity extends Activity {
 	/**
 	 * Méthode appelée lors d'un clic sur le bouton pour voir les images
 	 * 
-	 * @param v
 	 */
 	public void seePictures(View v) {
 		Intent i = new Intent(getApplicationContext(),
@@ -157,7 +142,7 @@ public class PicsAppActivity extends Activity {
 	/**
 	 * Traite les résultats retournés par les activités externes appelées,
 	 * notamment l'appareil photo et la galerie du téléphone.
-	 * 
+	 * Après sélection de l'image, l'activité SendPictureActivity est lancée.
 	 * @param requestCode
 	 *            Le code avec lequel l'activité a été appelée.
 	 * @param resultCode
@@ -248,7 +233,7 @@ public class PicsAppActivity extends Activity {
 				.setOnCancelListener(new DialogInterface.OnCancelListener() {
 
 					public void onCancel(DialogInterface dialog) {
-						// Do nothing
+						// rien à faire
 					}
 				});
 

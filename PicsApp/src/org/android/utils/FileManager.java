@@ -6,10 +6,15 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
+import android.os.Environment;
 import android.util.Log;
 
 /**
@@ -19,6 +24,7 @@ import android.util.Log;
  * 
  * @author Elodie
  * @author Oriane
+ * @author Alex
  * 
  */
 public class FileManager {
@@ -45,12 +51,9 @@ public class FileManager {
 	/**
 	 * * Enregistre une image dans le dossier passé en paramètre.
 	 * 
-	 * @param folderName
-	 *            Le dossier dans lequel enregistrer l'image
-	 * @param user
-	 *            L'utilisateur a qui on envoie l'image
-	 * @param path
-	 *            Le chemin d'accès de l'image
+	 * @param folderName Le dossier dans lequel enregistrer l'image
+	 * @param user L'utilisateur a qui on envoie l'image
+	 * @param path Le chemin d'accès de l'image
 	 */
 	public void savePicture(String folderName, String user, String path) {
 		// Vérifie si le chemin correspond à l'un de nos dossiers.
@@ -83,6 +86,43 @@ public class FileManager {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Cette méthode télécharge une image grâce à la connexion conn
+	 * et la sauve sur la carte SD
+	 * @param conn
+	 * @param filename
+	 * @return le chemin complet vers l'image
+	 */
+	public String savePicturetoSD(URLConnection conn, String filename){
+		
+		File sdcard = Environment.getExternalStorageDirectory();
+		File pictureDir = new File(sdcard, "PicsApp");
+		
+		String picturePath = pictureDir.getAbsolutePath() + "/" + filename;
+		
+		pictureDir.mkdirs();
+		try {
+			
+			InputStream is = conn.getInputStream();
+			OutputStream os = new FileOutputStream(picturePath);
+	
+			byte[] b = new byte[2048];
+			int length;
+	
+			while ((length = is.read(b)) != -1) {
+				os.write(b, 0, length);
+			}
+	
+			is.close();
+			os.close();	
+		} catch (IOException e) {
+			return null;
+		} finally {
+			
+		}
+		return picturePath;
+	}
 
 	/**
 	 * Supprimer un album du dossier spécifié en paramètre.
@@ -101,7 +141,16 @@ public class FileManager {
 		File toDelete = new File(directory.getPath(), name);
 		if (!toDelete.exists()) {
 			return true;
+		} else {
+			// supprime toutes les images du disque pour ce dossier
+			ArrayList<String> picts = retrievePictures(name,folderName);
+			for(int i=0;i<picts.size();i++){
+				File img = new File(picts.get(i));
+				boolean ok = img.delete();
+				Log.d("delete","image "+ picts.get(i) + " -> " + ok);
+			}
 		}
+		// finalement on supprime le fichier de référence pour l'utilisateur
 		return toDelete.delete();
 	}
 
@@ -135,8 +184,7 @@ public class FileManager {
 	/**
 	 * Récupère l'album avec le nom spécifié.
 	 * 
-	 * @param albumName
-	 *            Le nom de l'album à récupérer.
+	 * @param albumName Le nom de l'album à récupérer.
 	 * @return L'album.
 	 */
 	public ArrayList<String> retrievePictures(String userName, String folderName) {
@@ -157,23 +205,20 @@ public class FileManager {
 			try {
 				fis = new FileInputStream(toRetrieve);
 
-				// Here BufferedInputStream is added for fast reading.
+				//  BufferedInputStream utilisé pour une lecture rapide
 				bis = new BufferedInputStream(fis);
 				dis = new DataInputStream(bis);
 
-				// dis.available() returns 0 if the file does not have more
-				// lines.
+				// dis.available() retourne 0 s'il n'y a plus de lignes à lire dans le fichier
 				while (dis.available() != 0) {
 
-					// this statement reads the line from the file and print it
-					// to the console.
 					String picturePath = dis.readLine();
 					if (!picturePath.equals("")) {
 						pictures.add(picturePath);
 					}
 				}
 
-				// dispose all the resources after using them.
+				// on libère les ressources
 				fis.close();
 				bis.close();
 				dis.close();
@@ -192,8 +237,7 @@ public class FileManager {
 	/**
 	 * Vérifie si un album du même nom existe déjà
 	 * 
-	 * @param name
-	 *            Le nom de l'utilisateur dont on veut vérifier l'existance
+	 * @param name Le nom de l'utilisateur dont on veut vérifier l'existance
 	 * @return true si un dossier d'utilisateur du même nom de trouve dans le
 	 *         dossier saved, false sinon.
 	 */
@@ -221,8 +265,7 @@ public class FileManager {
 	 * Vérifie si le chemin passé en paramètre correspond bien à un des dossiers
 	 * de l'application.
 	 * 
-	 * @param folderName
-	 *            Le chemin à vérifier.
+	 * @param folderName Le chemin à vérifier.
 	 */
 	public void verifyPath(String folderName) {
 		if (!(folderName.equals(SENT_FOLDER_PATH) || folderName

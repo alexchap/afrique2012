@@ -21,10 +21,11 @@ import android.widget.TextView;
 
 /**
  * 
- * Classe qui s'occupe de la création d'un nouvel album.
+ * Classe qui s'occupe de l'affichage d'un album
  * 
  * @author Elodie
  * @author Oriane
+ * @author Alex
  * 
  */
 public class ViewImagesActivity extends Activity {
@@ -64,7 +65,7 @@ public class ViewImagesActivity extends Activity {
 		refreshView(0);
 	}
 
-	/** Rafraîchit la view */
+	/** Rafraîchit la vue */
 	public void refreshView(int positionToDisplay) {
 		if (mPictures != null && !mPictures.isEmpty()) {
 
@@ -112,8 +113,7 @@ public class ViewImagesActivity extends Activity {
 	 * Transforme l'Uri retournée par les activités en un chemin vers l'image
 	 * sur la carte SD
 	 * 
-	 * @param uri
-	 *            L'Uri a transformer en chemin.
+	 * @param uri  L'Uri a transformer en chemin.
 	 */
 	public String getPath(Uri uri) {
 		String[] projection = { MediaStore.Images.Media.DATA };

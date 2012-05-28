@@ -3,26 +3,26 @@ package org.android.utils;
 import java.io.IOException;
 
 import org.android.R;
+import org.android.communication.PictureReceiver;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.media.ExifInterface;
-import android.net.Uri;
-import android.os.Environment;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
-
+/**
+ * Cette class rassemble plusieurs informations/méthodes utiles
+ * à l'intégralité du projet PicsApp
+ * 
+ * @author Elodie
+ * @author Oriane
+ * @author Alex
+ *
+ */
 public class Utils {
-	// Récupère l'identificateur du téléphone
-	public static String getPhoneId(Context mContext) {
-		TelephonyManager tManager = (TelephonyManager) mContext
-				.getSystemService(Context.TELEPHONY_SERVICE);
-		return tManager.getDeviceId();
-	}
 
-	// URL du serveur à contacter
+	/** URL du serveur à contacter */
 	public static final String SERVER_URL = "http://128.178.75.23:8080/PicsAppServer_v1.1/";
 
 	/** Code pour appeler la galerie */
@@ -35,8 +35,20 @@ public class Utils {
 	final static String EXIF_TAG = "UserComment";
 
 	/**
+	 *  Récupère l'identificateur du téléphone
+	 * @param mContext
+	 * @return l'ID du téléphone
+	 */
+	public static String getPhoneId(Context mContext) {
+		TelephonyManager tManager = (TelephonyManager) mContext
+		.getSystemService(Context.TELEPHONY_SERVICE);
+		return tManager.getDeviceId();
+	}
+	
+	/**
 	 * Cette méthode écrit un commentaire dans une image en ajoutant un tag
 	 * EXIF.
+	 * Limitations : image JPEG et sans tag UserComment prédéfini
 	 */
 	public static boolean setComment(String imagePath, String comment) {
 
@@ -68,18 +80,11 @@ public class Utils {
 		}
 		return comment;
 	}
-	
-	public static void refreshSDcard(Context c){
-		c.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
-				Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
 
-	}
-	
 	/**
 	 * Crée un dialogue ayant un titre et un bouton pour valider l'input
 	 * 
-	 * @param dialogTitle
-	 *            le titre à assigner au dialogue
+	 * @param dialogTitle  le titre à assigner au dialogue
 	 * @param context le contexte (activité)
 	 * @return le dialogue créé
 	 */
@@ -97,6 +102,31 @@ public class Utils {
 		inputDialogBuilder.setView(simpleDialogView);
 		AlertDialog inputDialog = inputDialogBuilder.create();
 		return inputDialog;
+	}
+
+	/**
+	 * Méthode principale pour vérifier si de nouvelles images sont disponibles
+	 * Si oui, elle sont téléchargées et une notification est affichée
+	 * @param c le contexte
+	 * @param mPhoneId l'ID du téléphone
+	 */
+	public static void checkAndDownloadPicts(final Context c, final String mPhoneId){
+		new Thread((new Runnable() {
+			public void run() {
+				PictureReceiver pictureReceiver = new PictureReceiver(mPhoneId);
+
+				if (pictureReceiver.checkReceivedPictures()) {
+
+					int numberReceived = pictureReceiver.getSize();
+
+					String[] senders = pictureReceiver.getImages();
+
+					for (int i = 0; i < numberReceived; i++) {
+						pictureReceiver.createNotification(c, senders[i]);
+					}
+				}
+			}
+		})).start();
 	}
 }
 
