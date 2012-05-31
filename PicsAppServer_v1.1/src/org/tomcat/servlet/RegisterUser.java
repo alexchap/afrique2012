@@ -44,28 +44,28 @@ public class RegisterUser extends HttpServlet {
 		int nbLine = -1;
 		boolean isCreate = false;
 		System.out.println("Register server");
-		// Extraction des données de l'utilisateur
+		//1-Extraction des données de l'utilisateur
 		String user = request.getParameter(DbManager.USERNAME_TAG);
 		String phoneId = request.getParameter(DbManager.PHONEID_TAG);
-		System.out.println(user);
-		System.out.println(phoneId);
 
-		// Vérifie si la paire phoneId et user existe déjà dans la base de
-		// données
+		//2-Vérifie si la paire (phoneId,user) n'existe pas déjà dans la base de
+		// données et enregistrement des identifiants de utilisateur
 		if (!mDbManager.isInDbPseudo(user)) {
-			// Ajoute l'utilisateur dans la base de données
+			// Mis à jour des identifiants de l'utilisateur dans la base de
+			// données
 			nbLine = mDbManager.addUser(user, phoneId);
 			// Création du dossier dans lequel seront enregistrés
-			// temporairement les albums envoyés par l'utilisateur
+			// temporairement la photos envoyée par l'utilisateur
 			isCreate = mFileManager.createDirectory(user);
 		}
 
-		// Se mettre d'accord sur les messages de confirmation
+		//3-Formulation de la réponse
 		if (isCreate && nbLine == 1) {
-			// Cas existait pas et a pu être créé
+			// Cas lorsque l'utilisateur n'existait pas et a été créé
 			response.setStatus(HttpServletResponse.SC_OK);
 		} else {
-			// Cas n'a pas pu être créé
+			// Cas lorsque l'utilisateur est déjà présent dans la base de
+			// données
 			response.setStatus(HttpServletResponse.SC_CONFLICT);
 		}
 	}

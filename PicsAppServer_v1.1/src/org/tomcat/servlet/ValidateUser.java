@@ -39,16 +39,18 @@ public class ValidateUser extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 
 		System.out.println("Validation de l'utilisateur");
+
+		// 1-Extraction de l'identifiant du téléphone
 		String phoneId = request.getParameter(DbManager.PHONEID_TAG);
 
+		// 2-Vérification si cet identifiant est déjà présent dans la base de
+		// données et formulation de la réponse
 		if (dbManager.isRegistered(DbManager.USER_TABLE,
 				DbManager.USER_PHONEID_FIELD, phoneId)) {
 			response.setStatus(VALID_OLD_USER);
-			// System.out.println(VALID_OLD_USER);
-
+			
 		} else {
 			response.setStatus(NOT_REGISTERED);
-			// System.out.println(NOT_REGISTERED);
 		}
 	}
 }

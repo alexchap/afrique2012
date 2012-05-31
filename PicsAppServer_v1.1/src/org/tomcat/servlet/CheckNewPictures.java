@@ -43,17 +43,20 @@ public class CheckNewPictures extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 
 		System.out.println("Checking new pictures");
+		//1-Extraction de l'identifiant du téléphone
 		String phoneId = request.getParameter(DbManager.PHONEID_TAG);
+		//2-Obtention du pseudo associé à cet identifiant
 		String pseudo = mDbManager.getUserPseudo(phoneId);
-
+		//3-Obtention de la liste de photo disponible pour cet utilisateur
 		ArrayList<String> paths = mDbManager.getNewPictures(pseudo);
-
+		//4-Recupération du nombre de photo de la liste
 		int total = paths.size();
+		//5-Ajout du nombre de photo dans l'entête de la réponse
 		response.setStatus(total + 1000);
-
+		//6-Transformation de la liste de photo en chaine de caractère
 		Gson gson = new Gson();
 		String pathsString = gson.toJson(paths);
-
+		//7-Envoie de la chaîne de caractère
 		PrintWriter out = response.getWriter();
 		out.write(pathsString);
 	}
