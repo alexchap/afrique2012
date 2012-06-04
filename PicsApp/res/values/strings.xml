@@ -1,53 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<string name="app_name">PicsApp</string>
-	<string name="envoyer_photo">Envoyer une image</string>
+    <string name="app_name">PicsApp</string>
+    <string name="envoyer_photo">Envoyer une image</string>
 
-	<!-- Voir les photos -->
-	<string name="view_pictures_sent">Envoyées</string>
-	<string name="view_pictures_received">Reçues</string>
+    <!-- Voir les photos -->
+    <string name="view_pictures_sent">Envoyées</string>
+    <string name="view_pictures_received">Reçues</string>
 
-	<!-- Utilisateur -->
-	<string name="username_hint">Nom d\'utilisateur</string>
-	<string name="accountcreate_invalidusername">Nom d\'utilisateur invalide. Les espaces ne sont
-		pas admis.
-	</string>
-	<string name="accountcreate_buttonlabel">Valider</string>
-	<string name="accountcreate_failure">Echec de l\'enregistrement.</string>
-	<string name="login_success">Enregistrement effectué</string>
+    <!-- Utilisateur -->
+    <string name="username_hint">Nom d\'utilisateur</string>
+    <string name="accountcreate_invalidusername">Nom d\'utilisateur invalide. Les espaces ne sont
+		pas admis.</string>
+    <string name="accountcreate_buttonlabel">Valider</string>
+    <string name="accountcreate_failure">Echec de l\'enregistrement.</string>
+    <string name="login_success">Enregistrement effectué</string>
 
-	<!-- Nouvelle photo -->
-	<string name="ajouter_photo">Ajouter une photo</string>
-	<string name="choisir_destinataire">Choisissez un destinataire</string>
-	<string name="galerie">Choisir dans la galerie</string>
-	<string name="prendre_photo">Prendre une photo</string>
-	<string name="confirmer">Envoyer</string>
-	<string name="annuler">Annuler</string>
-	<string name="commentaire">Commentaire</string>
-	<string name="receiver_prompt">Choisir un destinataire</string>
-	<string name="image_introuvable">Problème : Aucune image trouvée !</string>
+    <!-- Nouvelle photo -->
+    <string name="ajouter_photo">Ajouter une photo</string>
+    <string name="choisir_destinataire">Choisissez un destinataire</string>
+    <string name="galerie">Choisir dans la galerie</string>
+    <string name="prendre_photo">Prendre une photo</string>
+    <string name="confirmer">Envoyer</string>
+    <string name="annuler">Annuler</string>
+    <string name="commentaire">Commentaire</string>
+    <string name="receiver_prompt">Choisir un destinataire</string>
+    <string name="image_introuvable">Problème : Aucune image trouvée !</string>
 
-	<!-- Envoi -->
-	<string name="patienter">Veuillez patienter</string>
-	<string name="envoi_en_cours">Envoi de l\'image en cours</string>
-	<string name="envoi_reussi">Envoi réussi!</string>
-	<string name="envoi_failed">Une erreur s\'est produite.</string>
-	
-	<!-- Réception -->
-	<string name="recu_nouvelle_image">vous a envoyé une nouvelle image!</string>
-	<string name="recu_nouvelle_image_short">Nouvelle image reçue</string>
-	<!-- Voir Photos -->
-	<string name="voir_photos">Voir les photos</string>
-	<string name="aucune_photo">Il n\'y a aucune photo à afficher!</string>
-	<string name="supprimer_images_confirmation_début">Supprimer toutes les images</string>
-	<string name="supprimer_images_confirmation_fin">cet utilisateur?</string>
-	<string name="supprimer_images_confirmer">Supprimer</string>
-	<string name="supprimer_images_succes">Images supprimées!</string>
+    <!-- Envoi -->
+    <string name="patienter">Veuillez patienter</string>
+    <string name="envoi_en_cours">Envoi de l\'image en cours</string>
+    <string name="envoi_reussi">Envoi réussi!</string>
+    <string name="envoi_failed">Une erreur s\'est produite.</string>
 
-	<!-- Dialogue pour s'enregistrer -->
-	<string name="registration_dialog_title">Enregistrement</string>
-	<string name="accountcreate_username_taken">Ce nom d\'utilisateur n\'est pas disponible
-	</string>
+    <!-- Réception -->
+    <string name="recu_nouvelle_image">vous a envoyé une nouvelle image!</string>
+    <string name="recu_nouvelle_image_short">Nouvelle image reçue</string>
+    <!-- Voir Photos -->
+    <string name="voir_photos">Voir les photos</string>
+    <string name="aucune_photo">Il n\'y a aucune photo à afficher!</string>
+    <string name="supprimer_images_confirmation_début">Supprimer toutes les images</string>
+    <string name="supprimer_images_confirmation_fin">cet utilisateur?</string>
+    <string name="supprimer_images_confirmer">Supprimer</string>
+    <string name="supprimer_images_succes">Images supprimées!</string>
 
+    <!-- Dialogue pour s'enregistrer -->
+    <string name="registration_dialog_title">Enregistrement</string>
+    <string name="accountcreate_username_taken">Ce nom d\'utilisateur n\'est pas disponible</string>
+
+    <!-- Menus -->
+    <string name="menu_rafraichir">Rafraîchir</string>
+	<string name="menu_partager">Partager</string>
+	<string name="menu_envoyer">Envoyer</string>
 </resources>

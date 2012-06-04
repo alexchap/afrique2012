@@ -1,5 +1,6 @@
 package org.android.activities;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.android.R;
@@ -8,11 +9,13 @@ import org.android.utils.ImageAdapter;
 import org.android.utils.Utils;
 
 import android.app.Activity;
-import android.database.Cursor;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -97,8 +100,10 @@ public class ViewImagesActivity extends Activity {
 			});
 			
 			if(positionToDisplay < 0){
+				// on va directement à la fin de l'album
 				mGallery.setSelection(mGallery.getCount() - 1);
 			} else {
+				// on affiche le début de l'album
 				mGallery.setSelection(positionToDisplay);
 			}
 			mText.setVisibility(View.VISIBLE);
@@ -123,19 +128,49 @@ public class ViewImagesActivity extends Activity {
 		Log.d("ViewImages", "Current folder : " + mCurrentFolder);
 	}
 
-	/**
-	 * Transforme l'Uri retournée par les activités en un chemin vers l'image
-	 * sur la carte SD
-	 * 
-	 * @param uri  L'Uri a transformer en chemin.
+	
+	/** 
+	 * Menus pour rafraîchir les albums et télécharger les éventuelles
+	 * nouvelles photos
 	 */
-	public String getPath(Uri uri) {
-		String[] projection = { MediaStore.Images.Media.DATA };
-		Cursor cursor = managedQuery(uri, projection, null, null, null);
-		int column_index = cursor
-				.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-		cursor.moveToFirst();
-		return cursor.getString(column_index);
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.viewimagesmenu , menu);
+		return true;
 	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		if(mGallery == null){
+			return false;
+		}
+		// Récupération du chemin de l'image sélectionnée actuellement
+		int selectedItemPos = mGallery.getSelectedItemPosition();
+		String selectedImg = mPictures.get(selectedItemPos);
+		Uri selectedImgUri = Uri.fromFile(new File(selectedImg));
+		
+		switch (item.getItemId()) {
+		case R.id.menu_partager:
+			// on partage l'image courante avec une autre application
+			Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+            sharingIntent.setType("image/jpeg");
+            sharingIntent.putExtra(Intent.EXTRA_STREAM, selectedImgUri);
+            startActivity(Intent.createChooser(sharingIntent, "Partager l'image avec ")); 
+			return true;
+		case R.id.menu_envoyer:
+			// on envoi l'image à un autre utilisateur
+			Intent sendPictureIntent = new Intent(this,
+					SendPictureActivity.class);
+
+			sendPictureIntent.putExtra("SelectedImage", selectedImg);
+			startActivity(sendPictureIntent);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
 
 }

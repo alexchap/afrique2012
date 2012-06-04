@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_envoyer"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_send"
+        android:title="@string/menu_envoyer"
+        android:visible="true">
+    </item>
+    <item
+        android:id="@+id/menu_partager"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_share"
+        android:title="@string/menu_partager"
+        android:visible="true">
+    </item>
+
+</menu>

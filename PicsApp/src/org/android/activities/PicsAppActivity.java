@@ -12,7 +12,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -188,7 +187,7 @@ public class PicsAppActivity extends Activity {
 
 		try {
 			Uri selectedImageUri = data.getData();
-			selectedImagePath = getPathFromUri(selectedImageUri);
+			selectedImagePath = Utils.getPathFromUri(PicsAppActivity.this,selectedImageUri);
 		} catch (NullPointerException npe) {
 			if (data == null) {
 				return mSelectedImagePath;
@@ -197,28 +196,7 @@ public class PicsAppActivity extends Activity {
 		return selectedImagePath;
 	}
 
-	/**
-	 * Transforme l'Uri retournée par les activités en un chemin vers l'image
-	 * sur la carte SD
-	 * 
-	 * @param uri
-	 *            L'Uri a transformer en chemin.
-	 */
-	public String getPathFromUri(Uri uri) {
-		String path = "";
-		try {
-			String[] projection = { MediaStore.Images.Media.DATA };
-			Cursor cursor = managedQuery(uri, projection, null, null, null);
-			int column_index = cursor
-					.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-			cursor.moveToFirst();
-			path = cursor.getString(column_index);
-		} catch (NullPointerException npe) {
-			path = uri.getPath();
-		}
-		return path;
-	}
-
+	
 	
 
 	/**

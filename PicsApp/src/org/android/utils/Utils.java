@@ -5,9 +5,13 @@ import java.io.IOException;
 import org.android.R;
 import org.android.communication.PictureReceiver;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.database.Cursor;
 import android.media.ExifInterface;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -128,5 +132,27 @@ public class Utils {
 			}
 		})).start();
 	}
+	
+	/**
+	 * Transforme l'Uri retournée par les activités en un chemin vers l'image
+	 * sur la carte SD
+	 * 
+	 * @param uri   L'Uri a transformer en chemin.
+	 */
+	public static String getPathFromUri(Activity ac, Uri uri) {
+		String path = "";
+		try {
+			String[] projection = { MediaStore.Images.Media.DATA };
+			Cursor cursor = ac.managedQuery(uri, projection, null, null, null);
+			int column_index = cursor
+					.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+			cursor.moveToFirst();
+			path = cursor.getString(column_index);
+		} catch (NullPointerException npe) {
+			path = uri.getPath();
+		}
+		return path;
+	}
+
 }
 
