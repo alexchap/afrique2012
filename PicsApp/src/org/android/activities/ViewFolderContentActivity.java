@@ -160,9 +160,8 @@ public class ViewFolderContentActivity extends ListActivity {
 		viewImagesIntent = new Intent(ViewFolderContentActivity.this,
 				ViewImagesActivity.class);
 		viewImagesIntent.putExtra("CURRENT_FOLDER", mCurrentFolder);
-
-
 		viewImagesIntent.putExtra("USER_NAME", userName);
+		viewImagesIntent.putExtra("newImage", true);
 		startActivity(viewImagesIntent);
 	}
 

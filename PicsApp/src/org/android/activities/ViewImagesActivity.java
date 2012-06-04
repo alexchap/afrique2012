@@ -43,6 +43,8 @@ public class ViewImagesActivity extends Activity {
 	private String mUser = "";
 	/** L'album que représente la galerie */
 	private ArrayList<String> mPictures;
+	/** Valeur booléenne si nouvelle image reçue **/
+	private boolean newImage = false;
 
 	/** Appelée à la création de l'activité */
 	@Override
@@ -61,8 +63,15 @@ public class ViewImagesActivity extends Activity {
 
 		mFileManager = new FileManager();
 		mPictures = mFileManager.retrievePictures(mUser, mCurrentFolder);
-
-		refreshView(0);
+		
+		if(newImage){
+			// on va à la fin de la liste
+			refreshView(-1);
+		} else{
+			// on va au début de la liste
+			refreshView(0);
+		}
+		
 	}
 
 	/** Rafraîchit la vue */
@@ -86,15 +95,19 @@ public class ViewImagesActivity extends Activity {
 				}
 
 			});
-
-			mGallery.setSelection(positionToDisplay);
+			
+			if(positionToDisplay < 0){
+				mGallery.setSelection(mGallery.getCount() - 1);
+			} else {
+				mGallery.setSelection(positionToDisplay);
+			}
 			mText.setVisibility(View.VISIBLE);
 			mCenteredText.setVisibility(View.GONE);
 		} else {
 			mText.setVisibility(View.GONE);
 			mCenteredText.setVisibility(View.VISIBLE);
 		}
-	}
+}
 
 	/**
 	 * Prend en charge les extras envoyés par l'activité appelante, comme le
@@ -104,6 +117,7 @@ public class ViewImagesActivity extends Activity {
 	public void handleExtras() {
 		Bundle extras = getIntent().getExtras();
 		mUser = (String) extras.get("USER_NAME");
+		newImage = (boolean) extras.getBoolean("newImage");
 		Log.d("ViewImages", "User : " + mUser);
 		mCurrentFolder = (String) extras.get("CURRENT_FOLDER");
 		Log.d("ViewImages", "Current folder : " + mCurrentFolder);
