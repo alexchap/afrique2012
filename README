@@ -1,0 +1,13 @@
+Prérequis pour faire tourner le serveur
+
+1. Déployer la base de données PicsAppDB dans mySQL workbench. utiliser le modèle DB MySQL/PicsAppBD.mwb
+2. Changer le répertoire local dans le FileManager du serveur
+3. Changer les infos de connexion à la DB dans DbManager du serveur (mot de passe, nom d'utilisateur)
+
+Hints : s'assurer q'aucune instance de tomcat n'est déjà en cours, et que le port 8080 est ouvert sur l'ordinateur !
+
+Pour faire tourner Picsapp
+
+1. Spécifier l'URL du serveur dans la classe Utils
+2. Installer l'application (soit depuis un fichier apk compilé via carte SD ou depuis Eclipse)
+3. Connecter le téléphone au WIFI

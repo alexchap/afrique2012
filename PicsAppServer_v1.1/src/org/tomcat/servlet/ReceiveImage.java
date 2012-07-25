@@ -1,5 +1,6 @@
 package org.tomcat.servlet;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -87,8 +88,8 @@ public class ReceiveImage extends HttpServlet {
 				}
 			}
 
-			// Vérifie si l'expéditeur et le destinataire sont bien dans la
-			// base de données
+			// Vï¿½rifie si l'expï¿½diteur et le destinataire sont bien dans la
+			// base de donnï¿½es
 			sender = mDbManager.getUserPseudo(phoneId);
 			boolean validSender = mDbManager.isRegistered(DbManager.USER_TABLE,
 					DbManager.USER_NAME_FIELD, sender);
@@ -96,18 +97,22 @@ public class ReceiveImage extends HttpServlet {
 					DbManager.USER_TABLE, DbManager.USER_NAME_FIELD, receiver);
 
 			if (validSender && validReceiver) {
-				// Vérifie si le dossier correspondant à l'expéditeur existe
+				// Vï¿½rifie si le dossier correspondant ï¿½ l'expï¿½diteur existe
 				// pour la sauvegarde de la photo dans la BD
 
-				if (mFileManager.exists(sender)) {
-					// Sauvegarde de l'image dans la base de données
-					String path = FileManager.DEFAULT_DB_PATH + sender + "\\"
-							+ receiver + "-" + fileName;
-					nbLine = mDbManager.saveImageInDb(sender, receiver, path);
-
-					// Enregistrement de la photo
-					statut = mFileManager.saveImageToDisk(it, sender, path);
+				if (! mFileManager.exists(sender)) {
+					mFileManager.createDirectory(sender);
+					System.out.println("RÃ©pertoire " + sender + " crÃ©Ã©");
 				}
+
+				// Sauvegarde de l'image dans la base de donnï¿½es
+				String path = FileManager.DEFAULT_DB_PATH + sender + File.separator
+						+ receiver + "-" + fileName;
+				nbLine = mDbManager.saveImageInDb(sender, receiver, path);
+
+				// Enregistrement de la photo
+				statut = mFileManager.saveImageToDisk(it, sender, path);
+				
 			}
 
 		} catch (FileUploadException e) {

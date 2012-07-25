@@ -28,7 +28,7 @@ public class Utils {
 
 	/** URL du serveur à contacter */
 	public static final String SERVER_URL = "http://128.178.75.23:8080/PicsAppServer_v1.1/";
-
+	// public static final String SERVER_URL = "http://192.168.1.46:8080/PicsAppServer_v1.1/";
 	/** Code pour appeler la galerie */
 	public static final int SELECT_PICTURE = 1;
 

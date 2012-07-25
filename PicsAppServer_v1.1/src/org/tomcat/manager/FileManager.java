@@ -11,15 +11,16 @@ import java.io.IOException;
 import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 
 /**
- * Classe permettant de gérer les fichiers
+ * Classe permettant de gï¿½rer les fichiers
  * 
  * @author alex
  * 
  */
 public class FileManager {
 
-	// Dossier où sera enregistré de façon temporaire les album des utilisateurs
+	// Dossier oï¿½ sera enregistrï¿½ de faï¿½on temporaire les album des utilisateurs
 	public static final String DEFAULT_DB_PATH = "C:\\Users\\alex\\Pictures\\PicsApp\\";
+	//public static final String DEFAULT_DB_PATH = "/home/chappuis/";
 
 	/**
 	 * 
@@ -28,11 +29,11 @@ public class FileManager {
 	}
 
 	/**
-	 * Crée un dossier dans le repertoire par défaut
+	 * Crï¿½e un dossier dans le repertoire par dï¿½faut
 	 * 
 	 * @param name
-	 *            Nom du dossier à créer
-	 * @return Oui, si le dossier est crée avec succès et non dans le cas
+	 *            Nom du dossier ï¿½ crï¿½er
+	 * @return Oui, si le dossier est crï¿½e avec succï¿½s et non dans le cas
 	 *         contraire
 	 */
 	public boolean createDirectory(String name) {
@@ -41,7 +42,7 @@ public class FileManager {
 	}
 
 	/**
-	 * vérifie si un dossier existe
+	 * vï¿½rifie si un dossier existe
 	 * 
 	 * @param directory
 	 * 			Nom du dossier 
@@ -58,12 +59,12 @@ public class FileManager {
 	 * @param item
 	 *            L'image
 	 * @param sender
-	 *            Expéditeur
+	 *            Expï¿½diteur
 	 * @param path
 	 * 			  Chemin absolu du fichier
 	 * 
 	 *  @return
-	 *  		 "oui" Si l'enregistrement s'est fait avec succès
+	 *  		 "oui" Si l'enregistrement s'est fait avec succï¿½s
 	 */
 	public boolean saveImageToDisk(DiskFileItem item, String sender, String path) {
 		try {

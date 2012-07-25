@@ -248,8 +248,9 @@ public class CommunicationHandler {
 
 		// 3. On définit l'entité et on exécute le POST
 		httpPost.setEntity(entity);
+		HttpResponse reponse;
 		try {
-			httpClient.execute(httpPost, localContext);
+			reponse = httpClient.execute(httpPost, localContext);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			return false;
@@ -257,6 +258,7 @@ public class CommunicationHandler {
 			e.printStackTrace();
 			return false;
 		}
+		Log.d("PicsApp","Envoi image - statut " + reponse.getStatusLine().getStatusCode() );
 		return true;
 	}
 

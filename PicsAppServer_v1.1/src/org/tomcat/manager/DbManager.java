@@ -11,7 +11,7 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
 
 /**
- * Classes permettant de faire toutes les accès à la base de données
+ * Classes permettant de faire toutes les accï¿½s ï¿½ la base de donnï¿½es
  * 
  * @author alex
  * 
@@ -23,18 +23,18 @@ public class DbManager {
 	private static final String DATABASE_USER = "root";
 	private static final String DATABASE_USER_PASSWD = "picsapp";
 
-	/** Champs dans la base de données */
+	/** Champs dans la base de donnï¿½es */
 	public static final String USER_PHONEID_FIELD = "phoneId";
 	public static final String USER_NAME_FIELD = "pseudo";
 	public static final String PICTURE_RECEIVER_FIELD = "receiver";
 	public static final String PICTURE_SENDER_FIELD = "sender";
 	public static final String PICTURE_PATH_FIELD = "path";
 
-	/** Tables dans la base de données */
+	/** Tables dans la base de donnï¿½es */
 	public static final String USER_TABLE = "user";
 	public static final String PICTURE_TABLE = "picture";
 
-	/** Tag des paramètres dans les requêtes */
+	/** Tag des paramï¿½tres dans les requï¿½tes */
 	public static final String PHONEID_TAG = "PHONEID";
 	public static final String USERNAME_TAG = "USERNAME";
 	public static final String RECEIVER_TAG = "RECEIVER";
@@ -47,17 +47,17 @@ public class DbManager {
 	}
 
 	/**
-	 * Etablie la connexion à la base de donnée
+	 * Etablie la connexion ï¿½ la base de donnï¿½e
 	 * 
-	 * @return Connection l'object Connection lié à la connexion établie
+	 * @return Connection l'object Connection liï¿½ ï¿½ la connexion ï¿½tablie
 	 */
 	public Connection dbConnection() {
 		Connection connection = null;
 		try {
-			// Enregistrer le driver JDBC auprès du responsable des drivers
+			// Enregistrer le driver JDBC auprï¿½s du responsable des drivers
 			Class.forName("com.mysql.jdbc.Driver");
 
-			// Connection à la base de donnée avec les informations de login
+			// Connection ï¿½ la base de donnï¿½e avec les informations de login
 			connection = (Connection) DriverManager.getConnection(
 					DATABASE_SERVER + DATABASE_PORT + DATABASE_NAME,
 					DATABASE_USER, DATABASE_USER_PASSWD);
@@ -66,16 +66,16 @@ public class DbManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Connection à la base de données...");
+		System.out.println("Connection ï¿½ la base de donnï¿½es...");
 		return connection;
 	}
 
 	/**
-	 * Exécute la requête de mis à jour fournie par l'object statement
+	 * Exï¿½cute la requï¿½te de mis ï¿½ jour fournie par l'object statement
 	 * 
 	 * @param statement
-	 *            Statement à executer
-	 * @return Le nombre de ligne mise à jour dans la base de données
+	 *            Statement ï¿½ executer
+	 * @return Le nombre de ligne mise ï¿½ jour dans la base de donnï¿½es
 	 */
 	public int dbUpdateQuery(PreparedStatement statement) {
 		int numLineDb = 0;
@@ -90,12 +90,12 @@ public class DbManager {
 	}
 
 	/**
-	 * Exécute la requête fournie par le statement
+	 * Exï¿½cute la requï¿½te fournie par le statement
 	 * 
 	 * @param statement
-	 *            à exécuter
+	 *            ï¿½ exï¿½cuter
 	 * @return ResultSet 
-	 * 		le résultat retourné par la base de donnée
+	 * 		le rï¿½sultat retournï¿½ par la base de donnï¿½e
 	 */
 	public ResultSet dbExecuteQuery(PreparedStatement statement) {
 		ResultSet rset = null;
@@ -108,15 +108,15 @@ public class DbManager {
 	}
 
 	/**
-	 * Exécute une requête avec un critère de recherche
+	 * Exï¿½cute une requï¿½te avec un critï¿½re de recherche
 	 * 
 	 * @param table
-	 *            la table dans laquelle on doit accéder
+	 *            la table dans laquelle on doit accï¿½der
 	 * @param field
 	 *            le champ voulu
 	 * @param value
-	 *            La valeur recherchée
-	 * @return ResultSet Résultat de la requête
+	 *            La valeur recherchï¿½e
+	 * @return ResultSet Rï¿½sultat de la requï¿½te
 	 */
 	public ResultSet getDbResultSet(String table, String field, String value) {
 		PreparedStatement stmnt = null;
@@ -134,13 +134,13 @@ public class DbManager {
 	}
 
 	/**
-	 * Vérifie si un utilisateur est présent dans la base de donnée
+	 * Vï¿½rifie si un utilisateur est prï¿½sent dans la base de donnï¿½e
 	 * 
 	 * @param	String
-	 * 			Nom de l'utilisateur recherché
+	 * 			Nom de l'utilisateur recherchï¿½
 	 * 
 	 * @return Boolean 
-	 * 			"oui" si l'utilisateur est présent dans la base de donnée
+	 * 			"oui" si l'utilisateur est prï¿½sent dans la base de donnï¿½e
 	 */
 	public boolean isInDbPseudo(String user) {
 		try {
@@ -159,14 +159,14 @@ public class DbManager {
 	}
 
 	/**
-	 * Ajoute un utilisateur dans la base de données
+	 * Ajoute un utilisateur dans la base de donnï¿½es
 	 * 
 	 * @param user
-	 *            Nom de l'utilisateur à ajouter
+	 *            Nom de l'utilisateur ï¿½ ajouter
 	 * @param phoneId
-	 *            l'id du téléphone de l'utilisateur à ajouter
+	 *            l'id du tï¿½lï¿½phone de l'utilisateur ï¿½ ajouter
 	 * @return
-	 * 			Nombre de ligne mis à jour dans la base de données
+	 * 			Nombre de ligne mis ï¿½ jour dans la base de donnï¿½es
 	 */		
 	public int addUser(String user, String phoneId) {
 
@@ -202,12 +202,12 @@ public class DbManager {
 	 * <code>table</code> a la valeur <code>value</code>
 	 * 
 	 * @param table
-	 *            la table à laquelle on doit accéder
+	 *            la table ï¿½ laquelle on doit accï¿½der
 	 * @param field
 	 *            le champ voulu
 	 * @param value
-	 *            la valeur recherchée
-	 * @return <code>true</code> si l'utilisateur est enregistré,
+	 *            la valeur recherchï¿½e
+	 * @return <code>true</code> si l'utilisateur est enregistrï¿½,
 	 *         <code>false</code> sinon
 	 */
 	public boolean isRegistered(String table, String field, String value) {
@@ -236,7 +236,7 @@ public class DbManager {
 	 * recherche des enregistrements de la table user
 	 * 
 	 * @param phoneId
-	 *            Critère de recherche
+	 *            Critï¿½re de recherche
 	 * @return Resultat de la recherche
 	 */
 	public ArrayList<String> getUsers(String phoneId) {
@@ -268,17 +268,17 @@ public class DbManager {
 	}
 
 	/**
-	 * Sauvegarder l'image dans la base de données
+	 * Sauvegarder l'image dans la base de donnï¿½es
 	 * 
 	 * @param sender
-	 *            l'expéditeur de la photo
+	 *            l'expï¿½diteur de la photo
 	 * 
 	 * @param receiver
 	 *            le destinataire de la photo
 	 * 
 	 * @param path
-	 *            Emplacement dans le disque où sera sauvegardée la photo
-	 * @return Nombre de ligne mis à jour
+	 *            Emplacement dans le disque oï¿½ sera sauvegardï¿½e la photo
+	 * @return Nombre de ligne mis ï¿½ jour
 	 */
 	public int saveImageInDb(String sender, String receiver, String path) {
 		String req = "insert into picture (sender,receiver,path) values (?,?,?)";
@@ -299,13 +299,13 @@ public class DbManager {
 	}
 
 	/**
-	 * Recherche les informations dans la table album liées à l'utilisateur
-	 * spécifié pour lesquelles le champs status  est 0
+	 * Recherche les informations dans la table album liï¿½es ï¿½ l'utilisateur
+	 * spï¿½cifiï¿½ pour lesquelles le champs status  est 0
 	 * 
 	 * @param pseudo
 	 *            Utilisateur dont on recherche les informations
 	 * @return ArrayList<String>
-	 * 				Liste du champs "path" correspondant au critère de recherche
+	 * 				Liste du champs "path" correspondant au critï¿½re de recherche
 	 */
 	public ArrayList<String> getNewPictures(String pseudo) {
 		PreparedStatement stmnt = null;
@@ -332,12 +332,12 @@ public class DbManager {
 	}
 
 	/**
-	 * Recherche une ligne spécique dans la table album liées à l'utilisateur
-	 * spécifié
+	 * Recherche une ligne spï¿½cique dans la table album liï¿½es ï¿½ l'utilisateur
+	 * spï¿½cifiï¿½
 	 * 
 	 * @param pseudo
 	 *            Utilisateur dont on recherche les informations
-	 * @return ResultSet Resultat de la requête
+	 * @return ResultSet Resultat de la requï¿½te
 	 */
 
 	public ResultSet getPictureToSend(String pseudo) {
@@ -359,16 +359,16 @@ public class DbManager {
 	}
 
 	/**
-	 * Met à jour le champ "status" d'un enregistrement de la table picture 
+	 * Met ï¿½ jour le champ "status" d'un enregistrement de la table picture 
 	 * 
 	 * @param sender
-	 * 			Expéditeur
+	 * 			Expï¿½diteur
 	 * @param receiver
 	 * 			Destinataire
 	 * @param path
 	 * 			Chemin absolu du fichier
 	 * @return
-	 * 			Nombre de ligne mise à jour
+	 * 			Nombre de ligne mise ï¿½ jour
 	 */
 	public int setPictureSent(String sender, String receiver, String path) {
 		String req = "update picture set status=1 where sender=? and receiver=? and path=?";
@@ -390,10 +390,10 @@ public class DbManager {
 	}
 
 	/**
-	 * Obtenir le nom d'un utilisateur en fonction de l'id de son téléphone
+	 * Obtenir le nom d'un utilisateur en fonction de l'id de son tï¿½lï¿½phone
 	 * 
 	 * @param phoneId
-	 * 			id du téléphone
+	 * 			id du tï¿½lï¿½phone
 	 * @return String
 	 * 			Nom de l'utilisateur
 	 */
