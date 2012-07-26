@@ -81,13 +81,24 @@ public class CommunicationHandler {
 
 	private static final int VALID_OLD_USER = 1010;
 	private static final int VALID_NEW_USER = 200;
-
+	
+	private static String SERVER_URL;
+	
 	private FileManager mFileManager;
 
 	/**
 	 * Constructeur vide
 	 */
 	private CommunicationHandler() {
+		mFileManager = new FileManager();
+		SERVER_URL = Utils.SERVER_URL;
+	}
+	
+	/**
+	 * Constructeur avec server URL
+	 */
+	public CommunicationHandler(String server_url) {
+		this.SERVER_URL = server_url;
 		mFileManager = new FileManager();
 	}
 
@@ -122,7 +133,7 @@ public class CommunicationHandler {
 			HttpClient client = new DefaultHttpClient();
 
 			// 1. On prépare l'URL cible
-			String url = Utils.SERVER_URL + USERS_SERVLET;
+			String url = SERVER_URL + USERS_SERVLET;
 			if (!url.endsWith("?"))
 				url += "?";
 
@@ -163,7 +174,7 @@ public class CommunicationHandler {
 	 * @return le status de l'envoi vers le serveur
 	 */
 	public boolean registerUser(String username, String phoneId) {
-		HttpPost httpPost = new HttpPost(Utils.SERVER_URL + USER_SERVLET);
+		HttpPost httpPost = new HttpPost(SERVER_URL + USER_SERVLET);
 		
 		// 1. On ajoute les paramètres à une list clés-valeur
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -190,8 +201,9 @@ public class CommunicationHandler {
 	 * @return le status de l'envoi vers le serveur
 	 */
 	public boolean isUser(String phoneId) {
-		HttpPost httpPost = new HttpPost(Utils.SERVER_URL + IS_USER_SERVLET);
+		HttpPost httpPost = new HttpPost(SERVER_URL + IS_USER_SERVLET);
 		
+		Log.d("CommunicationHandler","isUser to server " + SERVER_URL + IS_USER_SERVLET);
 		// 1. On définit les paramètres
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 
@@ -228,7 +240,7 @@ public class CommunicationHandler {
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpContext localContext = new BasicHttpContext();
 		// 1. On prépare la requête POST et l'entité multipart
-		HttpPost httpPost = new HttpPost(Utils.SERVER_URL + RECEIVE_IMAGE_SERVLET);
+		HttpPost httpPost = new HttpPost(SERVER_URL + RECEIVE_IMAGE_SERVLET);
 		MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 
 		// 2. On ajoute les champs : id expéditeur, destinataire puis l'image
@@ -271,7 +283,7 @@ public class CommunicationHandler {
 	 * @return
 	 */
 	public ArrayList<String> checkReceivedPicture(String phoneId) {
-		HttpPost httpPost = new HttpPost(Utils.SERVER_URL + CHECK_NEW_PICTURES_SERVLET);
+		HttpPost httpPost = new HttpPost(SERVER_URL + CHECK_NEW_PICTURES_SERVLET);
 		// 1. On prépare les paramètres
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 
@@ -304,7 +316,7 @@ public class CommunicationHandler {
 		String filename = null;
 
 		// 1. Préparation de l'URL pour demander l'image "suivante" au serveur
-		String url = Utils.SERVER_URL + SEND_IMAGE;
+		String url = SERVER_URL + SEND_IMAGE;
 		if (!url.endsWith("?"))
 			url += "?";
 
