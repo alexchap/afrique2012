@@ -12,7 +12,7 @@ import org.tomcat.manager.FileManager;
 
 /**
  * Servlet permettant d'enregistrer les identifiants des utilisateurs dans la
- * base de données
+ * base de donnï¿½es
  */
 public class RegisterUser extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -44,28 +44,28 @@ public class RegisterUser extends HttpServlet {
 		int nbLine = -1;
 		boolean isCreate = false;
 		System.out.println("Register server");
-		//1-Extraction des données de l'utilisateur
+		//1-Extraction des donnï¿½es de l'utilisateur
 		String user = request.getParameter(DbManager.USERNAME_TAG);
 		String phoneId = request.getParameter(DbManager.PHONEID_TAG);
 
-		//2-Vérifie si la paire (phoneId,user) n'existe pas déjà dans la base de
-		// données et enregistrement des identifiants de utilisateur
-		if (!mDbManager.isInDbPseudo(user)) {
-			// Mis à jour des identifiants de l'utilisateur dans la base de
-			// données
+		//2-Vï¿½rifie si la paire (phoneId,user) n'existe pas dï¿½jï¿½ dans la base de
+		// donnï¿½es et enregistrement des identifiants de utilisateur
+		if (!mDbManager.isInDbPseudo(user) && !user.equalsIgnoreCase("echo")) {
+			// Mis ï¿½ jour des identifiants de l'utilisateur dans la base de
+			// donnï¿½es
 			nbLine = mDbManager.addUser(user, phoneId);
-			// Création du dossier dans lequel seront enregistrés
-			// temporairement la photos envoyée par l'utilisateur
+			// Crï¿½ation du dossier dans lequel seront enregistrï¿½s
+			// temporairement la photos envoyï¿½e par l'utilisateur
 			isCreate = mFileManager.createDirectory(user);
 		}
 
-		//3-Formulation de la réponse
+		//3-Formulation de la rï¿½ponse
 		if (isCreate && nbLine == 1) {
-			// Cas lorsque l'utilisateur n'existait pas et a été créé
+			// Cas lorsque l'utilisateur n'existait pas et a ï¿½tï¿½ crï¿½ï¿½
 			response.setStatus(HttpServletResponse.SC_OK);
 		} else {
-			// Cas lorsque l'utilisateur est déjà présent dans la base de
-			// données
+			// Cas lorsque l'utilisateur est dï¿½jï¿½ prï¿½sent dans la base de
+			// donnï¿½es
 			response.setStatus(HttpServletResponse.SC_CONFLICT);
 		}
 	}

@@ -19,8 +19,8 @@ import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 public class FileManager {
 
 	// Dossier o� sera enregistr� de fa�on temporaire les album des utilisateurs
-	public static final String DEFAULT_DB_PATH = "C:\\Users\\alex\\Pictures\\PicsApp\\";
-	//public static final String DEFAULT_DB_PATH = "/home/chappuis/";
+	//public static final String DEFAULT_DB_PATH = "C:\\Users\\alex\\Pictures\\PicsApp\\";
+	public static final String DEFAULT_DB_PATH = "/home/chappuis/";
 
 	/**
 	 * 

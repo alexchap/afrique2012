@@ -15,12 +15,12 @@ import org.tomcat.manager.DbManager;
 import com.google.gson.Gson;
 
 /**
- * Servlet qui retourne tous les utilisateurs présents dans la base de données
+ * Servlet qui retourne tous les utilisateurs prï¿½sents dans la base de donnï¿½es
  */
 public class GetUsers extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	/** Tag pour l'id du téléphone */
+	/** Tag pour l'id du tï¿½lï¿½phone */
 
 	private DbManager dbManager = new DbManager();
 
@@ -38,16 +38,17 @@ public class GetUsers extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Send users list to client");
-		//1-Extraction de l'identifiant du téléphone
+		//1-Extraction de l'identifiant du tï¿½lï¿½phone
 		String phoneId = request.getParameter(DbManager.PHONEID_TAG);
 		//2-Obtention de la liste des utilisateurs
 		ArrayList<String> users = dbManager.getUsers(phoneId);
+		users.add("ECHO");
 		//trie
 		Collections.sort(users);
-		//3-Transformation de la liste en chaîne de caractères 
+		//3-Transformation de la liste en chaï¿½ne de caractï¿½res 
 		Gson gson = new Gson();
 		String usersString = gson.toJson(users);
-		//4-Envoie de la chaîne de caractères
+		//4-Envoie de la chaï¿½ne de caractï¿½res
 		PrintWriter out = response.getWriter();
 		out.write(usersString);
 	}

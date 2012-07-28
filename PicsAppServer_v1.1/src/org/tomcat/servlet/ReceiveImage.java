@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -94,7 +96,7 @@ public class ReceiveImage extends HttpServlet {
 			boolean validSender = mDbManager.isRegistered(DbManager.USER_TABLE,
 					DbManager.USER_NAME_FIELD, sender);
 			boolean validReceiver = mDbManager.isRegistered(
-					DbManager.USER_TABLE, DbManager.USER_NAME_FIELD, receiver);
+					DbManager.USER_TABLE, DbManager.USER_NAME_FIELD, receiver) || receiver.equalsIgnoreCase("echo");
 
 			if (validSender && validReceiver) {
 				// V�rifie si le dossier correspondant � l'exp�diteur existe
@@ -113,7 +115,17 @@ public class ReceiveImage extends HttpServlet {
 				// Enregistrement de la photo
 				statut = mFileManager.saveImageToDisk(it, sender, path);
 				
+				// Si envoi à utilisateur ECHO, on ajoute une photo aléatoire
+				// dans la DB qui sera renvoyée à l'utilisateur
+				if(receiver.equalsIgnoreCase("echo")){
+					System.out.println("ECHO user - assign random image to " + sender);
+					String random_path = getRandomImage();
+					System.out.println("ECHO: Image aléatoire choisie : " + random_path);
+					nbLine = mDbManager.saveImageInDb("echo",sender, random_path);
+				}
+				
 			}
+			
 
 		} catch (FileUploadException e) {
 			e.printStackTrace();
@@ -123,5 +135,18 @@ public class ReceiveImage extends HttpServlet {
 		else
 			response.setStatus(NOT_RECEIVE);
 
+	}
+	
+	// cette fonction retourne une image aléatoire dans le dossier img
+	private String getRandomImage(){
+		
+		ServletContext ctxt = getServletContext();
+		File mydir = new File(ctxt.getRealPath("/")+"WEB-INF/img/");
+		
+		File[] myfiles = mydir.listFiles();
+		Random r = new Random();
+		String imgpath = myfiles[r.nextInt(myfiles.length)].getAbsolutePath();
+		return imgpath;
+		
 	}
 }

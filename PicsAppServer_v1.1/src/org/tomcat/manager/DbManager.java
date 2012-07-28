@@ -21,7 +21,7 @@ public class DbManager {
 	private static final String DATABASE_PORT = "3306/";
 	private static final String DATABASE_NAME = "PicsAppBD";
 	private static final String DATABASE_USER = "root";
-	private static final String DATABASE_USER_PASSWD = "picsapp";
+	private static final String DATABASE_USER_PASSWD = ""; // picsapp
 
 	/** Champs dans la base de donn�es */
 	public static final String USER_PHONEID_FIELD = "phoneId";
